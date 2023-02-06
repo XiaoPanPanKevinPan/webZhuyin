@@ -2,8 +2,10 @@
 <html>
 	<head>
 		<title>HTML 文字加注音</title>
+		<meta charset="UTF-8" />
 		<script type="module">
-			import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'						
+			import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
+			import { translator as zhuyinTranslator } from "./1qazToBopomofo.js";
 
 			createApp({
 				data: () => ({
@@ -14,6 +16,10 @@
 					horiRightHTML: ""
 				}), 
 				methods: {
+					zhuyinTranslator(...x){
+						console.log("keydown");
+						zhuyinTranslator(...x);
+					},
 					generate(e){
 						let text = this.text.split(''), zhuyin = this.zhuyin.split(/[\ \n]+|(?<=[ˉˊˇˋ˙])/);
 						console.log(text, zhuyin);
@@ -127,24 +133,6 @@
 	}
 </style>
 <ruby class="zhuyinVert">${mainHTML} </ruby></div>`;
-					},
-					zhuyinKeyboard(e){
-						const orig = "1qaz2wsxedcrfv5tgbyhnujm8ik,9ol.0p;/-= 6347'", 
-						      symb = "ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ ˉˊˇˋ˙'";
-						const loc = orig.indexOf(e.key);
-						if(loc == -1 || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.code.match(/Numpad*/)) return this.generate();
-						
-						e.preventDefault();
-
-						let newstr = "", t = e.target;
-
-						newstr += symb[loc];
-						if(" 6347'".indexOf(e.key) != -1) newstr += " ";
-
-						t.setRangeText(newstr, t.selectionStart, t.selectionEnd, "end");
-						this.zhuyin = t.value;
-
-						this.generate();
 					}
 				}
 			}).mount('#vueApp');
@@ -160,7 +148,7 @@
 			<textarea id="text" v-model="text" @input="generate" placeholder="這樣子輸入，懂嗎？
 
 這邊直接放上文章"></textarea>
-			<textarea id="zhuyin" :value="zhuyin" @keydown="zhuyinKeyboard" placeholder="ㄓㄜˋ ㄧㄤˋ ㄗ˙ ㄕㄨˉ ㄖㄨˋ ' ㄉㄨㄥˇ ㄇㄚ˙ ' 
+			<textarea id="zhuyin" v-model="zhuyin" @input="generate" @keydown="zhuyinTranslator" placeholder="ㄓㄜˋ ㄧㄤˋ ㄗ˙ ㄕㄨˉ ㄖㄨˋ ' ㄉㄨㄥˇ ㄇㄚ˙ ' 
 
 聲調在每個注音結尾，中間插入空格，略過文字以 ' 代替。
 請將鍵盤切換英數模式，直接輸入。空格鍵輸入一聲，'=' 鍵輸入空格。"></textarea>
