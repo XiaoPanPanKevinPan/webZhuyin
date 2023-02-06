@@ -16,10 +16,7 @@
 					horiRightHTML: ""
 				}), 
 				methods: {
-					zhuyinTranslator(...x){
-						console.log("keydown");
-						zhuyinTranslator(...x);
-					},
+					zhuyinTranslator: zhuyinTranslator,
 					generate(e){
 						let text = this.text.split(''), zhuyin = this.zhuyin.split(/[\ \n]+|(?<=[ˉˊˇˋ˙])/);
 						console.log(text, zhuyin);
