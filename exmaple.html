@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>HTML 文字加注音</title>
+		<script type="module">
+			import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'						
+
+			createApp({
+				data: () => ({
+					text: "",
+					zhuyin: "",
+					vertHTML: "",
+					horiUpHTML: "",
+					horiRightHTML: ""
+				}), 
+				methods: {
+					generate(e){
+						let text = this.text.split(''), zhuyin = this.zhuyin.split(/[\ \n]+|(?<=[ˉˊˇˋ˙])/);
+						console.log(text, zhuyin);
+
+						let mainHTML = "";
+						for(let i = 0; i < text.length; i++) {
+							let inRt = "";
+							if(zhuyin[i]) {
+								let [zhuyinSymb, zhuyinTone] = zhuyin[i].split(/(?=[ˉˊˇˋ˙])/);
+								if(zhuyinSymb == "'") zhuyinSymb = "";
+
+								zhuyinTone ??= "";
+								if(zhuyinTone == "ˉ") zhuyinTone = "　";
+								  // Chrome acts weird when use transform/translate on tone - 
+								  // the lack of tone affect the whole zhuyin's position
+								  // so use '　' as an alternative to ''
+
+								inRt = zhuyinTone == '˙' ? `˙${zhuyinSymb}` : `${zhuyinSymb}<span class="zhuyinTone">${zhuyinTone}</span>`;
+							}
+							mainHTML += text[i] + (inRt != "" ? `<rt>${inRt}</rt>` : `<rt></rt>`);
+						}
+						this.horiUpHTML = 
+`<style>
+	@font-face {
+		font-family: "TW-Moe-Std-Kai";
+		src: url("https://gist.githubusercontent.com/XiaoPanPanKevinPan/e064a6ca6b35a964e0a927bf2f2ecc84/raw/fb85739e5a3906d2b99fa29f29349779e658b690/edukai-4.0.ttf") format("truetype");
+	}
+	.zhuyinHoriUp {
+		line-height: 1.5em;
+		font-family: "TW-Moe-Std-Kai";
+	}
+	.zhuyinHoriUp rt {
+		font-size: 0.3em;
+		text-justify: none;
+		translate: 0 calc(-1em / 9);
+		user-select: none;
+	}
+	.zhuyinHoriUp rt .zhuyinTone {
+		font-size: calc(5em / 9);
+
+		display: inline-block;
+		width: 0px;
+		transform: translate(calc(-3em / 5), calc(-9em / 5));
+	}
+</style>
+<ruby class="zhuyinHoriUp">${mainHTML} </ruby>`
+
+						this.horiRightHTML = 
+`<style>
+	@font-face {
+		font-family: "TW-Moe-Std-Kai";
+		src: url("https://gist.githubusercontent.com/XiaoPanPanKevinPan/e064a6ca6b35a964e0a927bf2f2ecc84/raw/fb85739e5a3906d2b99fa29f29349779e658b690/edukai-4.0.ttf") format("truetype");
+	}
+	.zhuyinHoriRight {
+		display: inline;
+		font-family: "TW-Moe-Std-Kai";
+	}
+	.zhuyinHoriRight rt{
+		display: inline-grid;
+		vertical-align: middle;
+
+		writing-mode: vertical-lr;
+		text-orientation: upright;
+
+		font-size: 0.3em;
+
+		width: calc(1em / 0.3 * 0.5);
+		padding-left: calc(1em / 9);
+
+		user-select: none;
+	}
+	.zhuyinHoriRight rt .zhuyinTone{
+		font-size: calc(5em / 9);
+		text-align: end;
+		padding-bottom: calc(9em / 5 * (2 / 3));
+	}
+</style>
+<ruby class="zhuyinHoriRight">${mainHTML} </ruby>`;
+						this.vertHTML = 
+`<div class="zhuyinVertContainer"><style>
+	@font-face {
+		font-family: "TW-Moe-Std-Kai";
+		src: url("https://gist.githubusercontent.com/XiaoPanPanKevinPan/e064a6ca6b35a964e0a927bf2f2ecc84/raw/fb85739e5a3906d2b99fa29f29349779e658b690/edukai-4.0.ttf") format("truetype");
+	}
+	.zhuyinVertContainer{
+		writing-mode: vertical-rl
+	}
+	.zhuyinVert {
+		ruby-position: over;
+		font-family: "TW-Moe-Std-Kai";
+	}
+	.zhuyinVert rt{
+		writing-mode: vertical-lr;
+		text-orientation: upright;
+
+		font-size: 0.3em;
+
+		translate: calc(1em / 9);
+
+		text-align: center;
+		text-justify: none;
+
+		user-select: none;
+	}
+	.zhuyinVert rt .zhuyinTone{
+		font-size: calc(5em / 9);
+		display: inline-block;
+		height: 0;
+		translate: calc(9em / 5 * 1) -2em;
+		text-orientation: upright;
+	}
+</style>
+<ruby class="zhuyinVert">${mainHTML} </ruby></div>`;
+					},
+					zhuyinKeyboard(e){
+						const orig = "1qaz2wsxedcrfv5tgbyhnujm8ik,9ol.0p;/-= 6347'", 
+						      symb = "ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ ˉˊˇˋ˙'";
+						const loc = orig.indexOf(e.key);
+						if(loc == -1 || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.code.match(/Numpad*/)) return this.generate();
+						
+						e.preventDefault();
+
+						let newstr = "", t = e.target;
+
+						newstr += symb[loc];
+						if(" 6347'".indexOf(e.key) != -1) newstr += " ";
+
+						t.setRangeText(newstr, t.selectionStart, t.selectionEnd, "end");
+						this.zhuyin = t.value;
+
+						this.generate();
+					}
+				}
+			}).mount('#vueApp');
+
+		</script>
+	</head>
+	<body>
+		<main id="vueApp" style="
+			display: grid;
+			grid-template: repeat(4, minmax(0, 1fr)) / repeat(2, minmax(0, 1fr));
+			height: 180vh;
+		">
+			<textarea id="text" v-model="text" @input="generate" placeholder="這樣子輸入，懂嗎？
+
+這邊直接放上文章"></textarea>
+			<textarea id="zhuyin" :value="zhuyin" @keydown="zhuyinKeyboard" placeholder="ㄓㄜˋ ㄧㄤˋ ㄗ˙ ㄕㄨˉ ㄖㄨˋ ' ㄉㄨㄥˇ ㄇㄚ˙ ' 
+
+聲調在每個注音結尾，中間插入空格，略過文字以 ' 代替。
+請將鍵盤切換英數模式，直接輸入。空格鍵輸入一聲，'=' 鍵輸入空格。"></textarea>
+			<div id="vertPrev" v-html="vertHTML ? vertHTML : '垂直文字預覽'"></div>
+			<textarea id="vertHTML" :value="vertHTML" placeholder="垂直文字程式碼" disabled></textarea>
+			<div id="horiUpPrev" v-html="horiUpHTML ? horiUpHTML : '水平、注音在上文字 預覽'"></div>
+			<textarea id="horiUpHTML" :value="horiUpHTML" placeholder="水平、注音在右文字 程式碼" disabled></textarea>
+			<div id="horiRightPrev" v-html="horiRightHTML ? horiRightHTML : '水平、注音在上文字 預覽'"></div>
+			<textarea id="horiRightHTML" :value="horiRightHTML" placeholder="水平、注音在右文字 程式碼" disabled></textarea>
+		</main>
+	</body>
+</html>
