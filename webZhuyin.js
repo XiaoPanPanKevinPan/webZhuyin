@@ -53,28 +53,36 @@ export function rubyHTML(
 		rpBef = !fsBef ? "" : `<rp>${fsBef}</rp>`,
 		rpAft = !fsAft ? "" : `<rp>${fsAft}</rp>`;
 
-	for(let i = 0; i < text.length; i++) {
+	if(type == "horiRight") for(let i = 0; i < text.length; i++) {
+		let [symb = "", tone = ""] = zhuyin[i] ?? [];
+		let inRt = !tone ? "" : tone == '˙' ? `˙${symb}` : `${symb}<span class="tone">${tone}</span>`;
+		mainHTML += `<span>${text[i]}${rpBef}<rt>${inRt}</rt>${rpAft}${fsAft}</span>`;
+	}
+	else for(let i = 0; i < text.length; i++) {
 		let [symb = "", tone = ""] = zhuyin[i] ?? [];
 		let inRt = !tone ? "" : tone == '˙' ? `˙${symb}` : `${symb}<span class="tone">${tone}</span>`;
 		mainHTML += `${text[i]}${rpBef}<rt>${inRt}</rt>${rpAft}${fsAft}`;
 	}
 
-	let idAttr = addId ? `id="${addId}"` : "",
-		styleElem = !withCSS ? "" : `<style>${rubyCSS(type, {addId, addClass, userSelectable})}</style>`;
+	let containerClass = "";
 
 	switch(type){
 		case "vert":
-			return `<div ${idAttr} class="zhuyinVertContainer ${addClass}"><ruby class="zhuyinVert">${styleElem}${mainHTML} </ruby></div>`
-
+			containerClass = "zhuyinVert";
+			break;
 		case "horiUp":
-			return `<ruby ${idAttr} class="zhuyinHoriUp ${addClass}">${styleElem}${mainHTML} </ruby>`
-
+			containerClass = "zhuyinHoriUp";
+			break;
 		default:
 		case "horiRight":
-			return `<ruby ${idAttr} class="zhuyinHoriRight ${addClass}">${styleElem}${mainHTML} </ruby>`
+			containerClass = "zhuyinHoriRight";
+			break;
 	};
-	mainClass += ` ${addClass}`;
+	let classAttr = `class="${containerClass} ${addClass}"`;
+	let idAttr = addId ? `id="${addId}"` : "",
+	    styleElem = !withCSS ? "" : `<style>${rubyCSS(type, {addId, addClass, userSelectable})}</style>`;
 
+	return `<div ${idAttr} ${classAttr}><ruby>${styleElem}${mainHTML} </ruby></div>`
 }
 
 /*--- deal with CSS ---*/
@@ -95,6 +103,9 @@ const fontface = `@font-face {
 
 const horiUpCSS = ({queryPrefix, userSelect}) => `${fontface}
 ${queryPrefix}.zhuyinHoriUp {
+	padding-top: 0.5em;
+}
+${queryPrefix}.zhuyinHoriUp ruby {
 	line-height: 1.5em;
 	font-family: "TW-Moe-Std-Kai";
 }
@@ -113,9 +124,12 @@ ${queryPrefix}.zhuyinHoriUp rt .tone {
 }`;
 
 const horiRightCSS = ({queryPrefix, userSelect}) => `${fontface}
-${queryPrefix}.zhuyinHoriRight {
+${queryPrefix}.zhuyinHoriRight ruby{
 	display: inline;
 	font-family: "TW-Moe-Std-Kai";
+}
+${queryPrefix}.zhuyinHoriRight ruby > span{
+	display: inline-block;
 }
 ${queryPrefix}.zhuyinHoriRight rt{
 	display: inline-grid;
@@ -138,14 +152,15 @@ ${queryPrefix}.zhuyinHoriRight rt .tone{
 }`;
 
 const vertCSS = ({queryPrefix, userSelect})=> `${fontface}
-${queryPrefix}.zhuyinVertContainer{
-	writing-mode: vertical-rl
+${queryPrefix}.zhuyinVert{
+	writing-mode: vertical-rl;
+	overflow: auto;
 }
-${queryPrefix} .zhuyinVert {
+${queryPrefix}.zhuyinVert ruby{
 	ruby-position: over;
 	font-family: "TW-Moe-Std-Kai";
 }
-${queryPrefix} .zhuyinVert rt{
+${queryPrefix}.zhuyinVert rt{
 	writing-mode: vertical-lr;
 	text-orientation: upright;
 
@@ -158,7 +173,7 @@ ${queryPrefix} .zhuyinVert rt{
 
 	${userSelect}
 }
-${queryPrefix} .zhuyinVert rt .tone{
+${queryPrefix}.zhuyinVert rt .tone{
 	font-size: calc(5em / 9);
 	display: inline-block;
 	height: 0;
