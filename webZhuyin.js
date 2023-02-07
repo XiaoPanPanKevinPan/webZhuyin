@@ -32,7 +32,7 @@ export function parseZhuyin(zhuyin = "", {firstTone = "&nbsp;"} = {}) {
 	return zhuyin
 		.split(/[\ \n]+|(?<=[ˉˊˇˋ˙])/)
 		.map(zhuyin => zhuyin.split(/(?=[ˉˊˇˋ˙])/))
-		.map(([symb = "", tone = "　"]) => [
+		.map(([symb = "", tone = "&nbsp;"]) => [
 			symb == "'" ? "" : symb,
 			tone == 'ˉ' ? firstTone : tone
 		]);
