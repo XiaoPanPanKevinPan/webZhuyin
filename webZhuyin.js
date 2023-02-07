@@ -189,7 +189,7 @@ ${queryPrefix}.zhuyinVert rt{
 	text-align: center;
 	text-justify: none;
 }
-${queryPrefix}.zhuyinHoriUp.rtUnselectable rt {
+${queryPrefix}.zhuyinVert.rtUnselectable rt {
 	user-select: none;
 }
 ${queryPrefix}.zhuyinVert rt .tone{
