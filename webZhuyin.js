@@ -76,10 +76,23 @@ export function rubyHTML(
 
 }
 
-const horiUpCSS = (queryPrefix) => `@font-face {
+/*--- deal with CSS ---*/
+const fontface = `@font-face {
 	font-family: "TW-Moe-Std-Kai";
-	src: url("https://gist.githubusercontent.com/XiaoPanPanKevinPan/e064a6ca6b35a964e0a927bf2f2ecc84/raw/fb85739e5a3906d2b99fa29f29349779e658b690/edukai-4.0.ttf") format("truetype");
-}
+	src:
+		local("TW-Moe-Std-Kai"),
+		url("https://gist.githubusercontent.com/XiaoPanPanKevinPan/e064a6ca6b35a964e0a927bf2f2ecc84/raw/fb85739e5a3906d2b99fa29f29349779e658b690/edukai-4.0.ttf") format("truetype"),
+			/* 教育部正楷體*/
+		local("TW-Kai"),
+			/* 全字庫正楷體*/
+		local("DFKai-SB"),
+			/* 微軟標楷體 */
+		local("BiauKai")
+			/* 蘋果標楷體 */
+		;
+}`;
+
+const horiUpCSS = (queryPrefix) => `${fontface}
 ${queryPrefix}.zhuyinHoriUp {
 	line-height: 1.5em;
 	font-family: "TW-Moe-Std-Kai";
@@ -98,10 +111,7 @@ ${queryPrefix}.zhuyinHoriUp rt .tone {
 	transform: translate(calc(-3em / 5), calc(-9em / 5));
 }`;
 
-const horiRightCSS = (queryPrefix) => `@font-face {
-	font-family: "TW-Moe-Std-Kai";
-	src: url("https://gist.githubusercontent.com/XiaoPanPanKevinPan/e064a6ca6b35a964e0a927bf2f2ecc84/raw/fb85739e5a3906d2b99fa29f29349779e658b690/edukai-4.0.ttf") format("truetype");
-}
+const horiRightCSS = (queryPrefix) => `${fontface}
 ${queryPrefix}.zhuyinHoriRight {
 	display: inline;
 	font-family: "TW-Moe-Std-Kai";
@@ -126,10 +136,7 @@ ${queryPrefix}.zhuyinHoriRight rt .tone{
 	padding-bottom: calc(9em / 5 * (2 / 3));
 }`;
 
-const vertCSS = (queryPrefix)=> `@font-face {
-	font-family: "TW-Moe-Std-Kai";
-	src: url("https://gist.githubusercontent.com/XiaoPanPanKevinPan/e064a6ca6b35a964e0a927bf2f2ecc84/raw/fb85739e5a3906d2b99fa29f29349779e658b690/edukai-4.0.ttf") format("truetype");
-}
+const vertCSS = (queryPrefix)=> `${fontface}
 ${queryPrefix}.zhuyinVertContainer{
 	writing-mode: vertical-rl
 }
@@ -159,7 +166,7 @@ ${queryPrefix} .zhuyinVert rt .tone{
 }`;
 
 export function rubyCSS(type, {addId = "", addClass = ""} = {}){
-	let shorten = x => x.replaceAll(/\n|\t/g, " ").replaceAll(/  +/g, " ");
+	let shorten = x => x.replaceAll(/\n|\t/g, " ").replaceAll(/\/\*.*?\*\//g, "").replaceAll(/  +/g, " ");
 	let queryPrefix = ""
 		+ (!addId ? "" : `#${addId}`)
 		+ (!addClass ? "" : `.${addClass.trim().replaceAll(/ +/, ".")}`);
