@@ -1,4 +1,4 @@
-export function sliceText(text) {
+export function sliceText(text="") {
 	// e.g. text == "你好嗎" or "你好[嗎]"
 
 	// use '[' and ']' to combine text, and a '\' to escape
