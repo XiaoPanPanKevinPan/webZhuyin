@@ -21,7 +21,9 @@
 					generate(e){
 						this.horiUpHTML = rubyHTML(this.text, this.zhuyin, "horiUp", {withCSS: true});
 						this.horiRightHTML = rubyHTML(this.text, this.zhuyin, "horiRight", {withCSS: true});
-						this.vertHTML = rubyHTML(this.text, this.zhuyin, "vert", {withCSS: true});
+						this.vertHTML = 
+							rubyHTML(this.text, this.zhuyin, "vert", {withCSS: true, addId: "vertHTML"})
+							+ `<style>#vertHTML {width: 100%;} </style>`;
 					}
 				}
 			}).mount('#vueApp');
