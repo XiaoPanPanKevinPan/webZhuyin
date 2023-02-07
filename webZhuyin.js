@@ -17,6 +17,7 @@ export function sliceText(text) {
 			else parsed.push(parsed.pop() + text[i]);
 		}
 	}
+	parsed = parsed.map(x => x.replaceAll(/ /g, "&nbsp;")); // Firefox compatibility
 	return parsed;
 	// ["你", "好", "嗎", ...]
 }
