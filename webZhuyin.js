@@ -158,6 +158,8 @@ const vertCSS = ({queryPrefix, userSelect})=> `${fontface}
 ${queryPrefix}.zhuyinVert{
 	writing-mode: vertical-rl;
 	overflow: auto;
+	width: 100%;
+	max-height: calc(100% - 16px);
 }
 ${queryPrefix}.zhuyinVert ruby{
 	ruby-position: over;
