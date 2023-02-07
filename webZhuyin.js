@@ -21,7 +21,7 @@ export function sliceText(text) {
 	// ["你", "好", "嗎", ...]
 }
 
-export function parseZhuyin(zhuyin = "", {firstTone = "　"} = {}) {
+export function parseZhuyin(zhuyin = "", {firstTone = "&nbsp;"} = {}) {
 	return zhuyin
 		.split(/[\ \n]+|(?<=[ˉˊˇˋ˙])/)
 		.map(zhuyin => zhuyin.split(/(?=[ˉˊˇˋ˙])/))
@@ -53,15 +53,20 @@ export function rubyHTML(
 		rpBef = !fsBef ? "" : `<rp>${fsBef}</rp>`,
 		rpAft = !fsAft ? "" : `<rp>${fsAft}</rp>`;
 
-	if(type == "horiRight") for(let i = 0; i < text.length; i++) {
-		let [symb = "", tone = ""] = zhuyin[i] ?? [];
-		let inRt = !tone ? "" : tone == '˙' ? `˙${symb}` : `${symb}<span class="tone">${tone}</span>`;
-		mainHTML += `<span>${text[i]}${rpBef}<rt>${inRt}</rt>${rpAft}${fsAft}</span>`;
-	}
-	else for(let i = 0; i < text.length; i++) {
-		let [symb = "", tone = ""] = zhuyin[i] ?? [];
-		let inRt = !tone ? "" : tone == '˙' ? `˙${symb}` : `${symb}<span class="tone">${tone}</span>`;
-		mainHTML += `${text[i]}${rpBef}<rt>${inRt}</rt>${rpAft}${fsAft}`;
+	if(type == "horiRight") {
+		for(let i = 0; i < text.length; i++) {
+			let [symb = "", tone = ""] = zhuyin[i] ?? [];
+			let inRt = !tone ? "" : tone == '˙' ? `˙${symb}` : `${symb}<span class="tone">${tone}</span>`;
+			mainHTML += `<ruby>${text[i]}${rpBef}<rt>${inRt}</rt>${rpAft}${fsAft}</ruby>`;
+		}
+	} else {
+		mainHTML += "<ruby>"
+		for(let i = 0; i < text.length; i++) {
+			let [symb = "", tone = ""] = zhuyin[i] ?? [];
+			let inRt = !tone ? "" : tone == '˙' ? `˙${symb}` : `${symb}<span class="tone">${tone}</span>`;
+			mainHTML += `${text[i]}${rpBef}<rt>${inRt}</rt>${rpAft}${fsAft}`;
+		}
+		mainHTML += "</ruby>";
 	}
 
 	let containerClass = "";
@@ -82,7 +87,7 @@ export function rubyHTML(
 	let idAttr = addId ? `id="${addId}"` : "",
 	    styleElem = !withCSS ? "" : `<style>${rubyCSS(type, {addId, addClass, userSelectable})}</style>`;
 
-	return `<div ${idAttr} ${classAttr}><ruby>${styleElem}${mainHTML} </ruby></div>`
+	return `<div ${idAttr} ${classAttr}>${styleElem}${mainHTML}</div>`;
 }
 
 /*--- deal with CSS ---*/
@@ -125,11 +130,8 @@ ${queryPrefix}.zhuyinHoriUp rt .tone {
 
 const horiRightCSS = ({queryPrefix, userSelect}) => `${fontface}
 ${queryPrefix}.zhuyinHoriRight ruby{
-	display: inline;
-	font-family: "TW-Moe-Std-Kai";
-}
-${queryPrefix}.zhuyinHoriRight ruby > span{
 	display: inline-block;
+	font-family: "TW-Moe-Std-Kai";
 }
 ${queryPrefix}.zhuyinHoriRight rt{
 	display: inline-grid;
@@ -166,7 +168,7 @@ ${queryPrefix}.zhuyinVert rt{
 
 	font-size: 0.3em;
 
-	translate: calc(1em / 9);
+	/*translate: calc(1em / 9); -- not working on Firefox and causing weird look on Chrome*/
 
 	text-align: center;
 	text-justify: none;
