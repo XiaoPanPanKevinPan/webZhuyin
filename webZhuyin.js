@@ -1,28 +1,29 @@
-export function sliceText(text="") {
+export function sliceText(text = "") {
 	// e.g. text == "你好嗎" or "你好[嗎]"
-
 	// use '[' and ']' to combine text, and a '\' to escape
 
-	let parsed = [];
+	let unparsed = [...text], parsed = [];
+		// the reason to create unparsed rather than directly use text is
+		// doing so might break user-perceived unicode chars
+		// refer: https://stackoverflow.com/questions/4547609/how-to-get-character-array-from-a-string/34717402#34717402
 	let combine = false, tmp = "";
 
-	for(let i = 0; i < text.length; i++){
+	for(let i = 0; i < unparsed.length; i++){
 		if(!combine){
-			if(text[i] == '[') combine = true;
-			else if(text[i] == '\\') parsed.push(text[++i] ?? "");
-			else parsed.push(text[i]);
+			if(unparsed[i] == '[') combine = true;
+			else if(unparsed[i] == '\\') parsed.push(unparsed[++i] ?? "");
+			else parsed.push(unparsed[i]);
 		} else {
-			if(text[i] == ']') {
+			if(unparsed[i] == ']') {
 				combine = false;
 				parsed.push(tmp);
 				tmp = "";
-			} else if(text[i] == '\\') tmp += text[++i] ?? "";
-			else tmp += text[i];
+			} else if(unparsed[i] == '\\') tmp += unparsed[++i] ?? "";
+			else tmp += unparsed[i];
 		}
 	}
-
 	if (tmp != "") parsed.push(tmp);
-	parsed = parsed.map(x => x.replaceAll(/ /g, "&nbsp;")); // Firefox compatibility
+
 	return parsed;
 	// ["你", "好", "嗎", ...]
 }
@@ -54,6 +55,10 @@ export function rubyHTML(
 		userSelectable = false
 	} = {}
 ){
+	text = text.map(x => x.replaceAll(/ /g, "&nbsp;"));
+		// Firefox compatibility: a mere ' ' as the text to be annotated cause the
+		// line extremely high
+
 	let mainHTML = "",
 		rpBef = !fsBef ? "" : `<rp>${fsBef}</rp>`,
 		rpAft = !fsAft ? "" : `<rp>${fsAft}</rp>`;
