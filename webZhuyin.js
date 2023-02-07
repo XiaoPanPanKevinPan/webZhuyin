@@ -140,11 +140,6 @@ ${queryPrefix}.zhuyinHoriRight ruby{
 ${queryPrefix}.zhuyinHoriRight rt{
 	display: inline-grid;
 	vertical-align: middle;
-	translate: calc(-1em + (1em / 9));
-		/* this code is used to correct the weird behaviour of Chrome,
-		   ( rt move right unintentionally as .tone is translated to the right)
-		   and it has no effect in Firefox, fortunately. */
-
 	writing-mode: vertical-lr;
 	text-orientation: upright;
 
@@ -179,6 +174,10 @@ ${queryPrefix}.zhuyinVert rt{
 	font-size: 0.3em;
 
 	/*translate: calc(1em / 9); -- not working on Firefox and causing weird look on Chrome*/
+	translate: calc(-1em + (1em / 9));
+		/* this code is used to correct the weird behaviour of Chrome,
+		   ( rt move right unintentionally as .tone is translated to the right)
+		   and it has no effect in Firefox, fortunately. */
 
 	text-align: center;
 	text-justify: none;
