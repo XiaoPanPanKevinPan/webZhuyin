@@ -84,9 +84,9 @@ export function rubyHTML(
 			containerClass = "zhuyinHoriRight";
 			break;
 	};
-	let classAttr = `class="${containerClass} ${addClass}"`;
+	let classAttr = `class="${containerClass} ${addClass} ${!userSelectable ? "rtUnselectable" : ""}"`;
 	let idAttr = addId ? `id="${addId}"` : "",
-	    styleElem = !withCSS ? "" : `<style>${rubyCSS(type, {addId, addClass, userSelectable})}</style>`;
+	    styleElem = !withCSS ? "" : `<style>${rubyCSS(type, {addId, addClass})}</style>`;
 
 	return `<div ${idAttr} ${classAttr}>${styleElem}${mainHTML}</div>`;
 }
@@ -107,7 +107,7 @@ const fontface = `@font-face {
 		;
 }`;
 
-const horiUpCSS = ({queryPrefix, userSelect}) => `${fontface}
+const horiUpCSS = ({queryPrefix}) => `${fontface}
 ${queryPrefix}.zhuyinHoriUp {
 	padding-top: 0.5em;
 }
@@ -122,7 +122,9 @@ ${queryPrefix}.zhuyinHoriUp rt {
 	text-justify: none;
 
 	translate: 0 calc(-1em / 9);
-	${userSelect}
+}
+${queryPrefix}.zhuyinHoriUp.rtUnselectable rt {
+	user-select: none;
 }
 ${queryPrefix}.zhuyinHoriUp rt .tone {
 	font-size: calc(5em / 9);
@@ -132,7 +134,7 @@ ${queryPrefix}.zhuyinHoriUp rt .tone {
 	transform: translate(calc(-3em / 5), calc(-9em / 5));
 }`;
 
-const horiRightCSS = ({queryPrefix, userSelect}) => `${fontface}
+const horiRightCSS = ({queryPrefix}) => `${fontface}
 ${queryPrefix}.zhuyinHoriRight ruby{
 	display: inline-block;
 	font-family: "TW-Moe-Std-Kai";
@@ -147,8 +149,9 @@ ${queryPrefix}.zhuyinHoriRight rt{
 
 	width: calc(1em / 0.3 * 0.5);
 	padding-left: calc(1em / 9);
-
-	${userSelect}
+}
+${queryPrefix}.zhuyinHoriRight.rtUnselectable rt {
+	user-select: none;
 }
 ${queryPrefix}.zhuyinHoriRight rt .tone{
 	font-size: calc(5em / 9);
@@ -156,7 +159,7 @@ ${queryPrefix}.zhuyinHoriRight rt .tone{
 	padding-bottom: calc(9em / 5 * (2 / 3));
 }`;
 
-const vertCSS = ({queryPrefix, userSelect})=> `${fontface}
+const vertCSS = ({queryPrefix})=> `${fontface}
 ${queryPrefix}.zhuyinVert{
 	writing-mode: vertical-rl;
 	overflow: auto;
@@ -181,8 +184,9 @@ ${queryPrefix}.zhuyinVert rt{
 
 	text-align: center;
 	text-justify: none;
-
-	${userSelect}
+}
+${queryPrefix}.zhuyinHoriUp.rtUnselectable rt {
+	user-select: none;
 }
 ${queryPrefix}.zhuyinVert rt .tone{
 	font-size: calc(5em / 9);
@@ -192,21 +196,20 @@ ${queryPrefix}.zhuyinVert rt .tone{
 	text-orientation: upright;
 }`;
 
-export function rubyCSS(type, {addId = "", addClass = "", userSelectable = false} = {}){
+export function rubyCSS(type, {addId = "", addClass = ""} = {}){
 	let shorten = x => x.replaceAll(/\n|\t/g, " ").replaceAll(/\/\*.*?\*\//g, "").replaceAll(/  +/g, " ");
 	let queryPrefix = ""
 		+ (!addId ? "" : `#${addId}`)
 		+ (!addClass ? "" : `.${addClass.trim().replaceAll(/ +/, ".")}`);
-	let userSelect = !userSelectable ? "user-select: none;" : "";
 	switch(type){
 		case "vert":
-			return shorten(vertCSS({queryPrefix, userSelect}));
+			return shorten(vertCSS({queryPrefix}));
 
 		case "horiUp":
-			return shorten(horiUpCSS({queryPrefix, userSelect}));
+			return shorten(horiUpCSS({queryPrefix}));
 
 		default:
 		case "horiRight":
-			return shorten(horiRightCSS({queryPrefix, userSelect}));
+			return shorten(horiRightCSS({queryPrefix}));
 	}
 }
