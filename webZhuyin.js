@@ -1,4 +1,6 @@
 export function sliceText(text) {
+	// e.g. text == "你好嗎" or "你好[嗎]"
+
 	// use '[' and ']' to combine text, and a '\' to escape
 
 	let parsed = [];
@@ -26,6 +28,7 @@ export function sliceText(text) {
 }
 
 export function parseZhuyin(zhuyin = "", {firstTone = "&nbsp;"} = {}) {
+	// zhuyin == "ㄋㄧˇ ㄏㄠˇ ㄇㄚ˙ " or "ㄋㄧˇㄏㄠˇㄇㄚ˙"
 	return zhuyin
 		.split(/[\ \n]+|(?<=[ˉˊˇˋ˙])/)
 		.map(zhuyin => zhuyin.split(/(?=[ˉˊˇˋ˙])/))
@@ -37,8 +40,8 @@ export function parseZhuyin(zhuyin = "", {firstTone = "&nbsp;"} = {}) {
 }
 
 export function rubyHTML(
-	origText = "",
-	origZhuyin = "",
+	text = [],
+	zhuyin = [],
 	type = "horiRight",
 	{
 		withCSS = false,
@@ -51,8 +54,6 @@ export function rubyHTML(
 		userSelectable = false
 	} = {}
 ){
-	let text = sliceText(origText), zhuyin = parseZhuyin(origZhuyin);
-
 	let mainHTML = "",
 		rpBef = !fsBef ? "" : `<rp>${fsBef}</rp>`,
 		rpAft = !fsAft ? "" : `<rp>${fsAft}</rp>`;

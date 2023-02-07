@@ -6,7 +6,7 @@
 		<script type="module">
 			import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
 			import { translator as zhuyinTranslator } from "./1qazToBopomofo.js";
-			import { rubyHTML, rubyCSS } from "./webZhuyin.js";
+			import * as wz from "./webZhuyin.js";
 
 			createApp({
 				data: () => ({
@@ -19,10 +19,24 @@
 				methods: {
 					zhuyinTranslator: zhuyinTranslator,
 					generate(e){
-						this.horiUpHTML = rubyHTML(this.text, this.zhuyin, "horiUp", {withCSS: true});
-						this.horiRightHTML = rubyHTML(this.text, this.zhuyin, "horiRight", {withCSS: true});
-						this.vertHTML = 
-							rubyHTML(this.text, this.zhuyin, "vert", {withCSS: true, addId: "vertHTML"});
+						this.horiUpHTML = wz.rubyHTML(
+							wz.sliceText(this.text),
+							wz.parseZhuyin(this.zhuyin),
+							"horiUp", 
+							{withCSS: true}
+						);
+						this.horiRightHTML = wz.rubyHTML(
+							wz.sliceText(this.text),
+							wz.parseZhuyin(this.zhuyin),
+							"horiRight", 
+							{withCSS: true}
+						);
+						this.vertHTML = wz.rubyHTML(
+							wz.sliceText(this.text),
+							wz.parseZhuyin(this.zhuyin),
+							"vert", 
+							{withCSS: true}
+						);
 					}
 				}
 			}).mount('#vueApp');
