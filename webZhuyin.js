@@ -28,14 +28,19 @@ export function sliceText(text = "") {
 	// ["你", "好", "嗎", ...]
 }
 
-export function parseZhuyin(zhuyin = "", {firstTone = "&nbsp;"} = {}) {
+export function parseZhuyin(
+	zhuyin = "",
+	{firstTone = "&nbsp;", defaultTone = "&nbsp;", noTone = "&nbsp;"} = {}
+) {
 	// zhuyin == "ㄋㄧˇ ㄏㄠˇ ㄇㄚ˙ " or "ㄋㄧˇㄏㄠˇㄇㄚ˙"
 	return zhuyin
 		.split(/[\ \n]+|(?<=[ˉˊˇˋ˙])/)
 		.map(zhuyin => zhuyin.split(/(?=[ˉˊˇˋ˙])/))
-		.map(([symb = "", tone = firstTone]) => [
+		.map(([symb = "", tone = defaultTone]) => [
 			symb == "'" ? "" : symb,
-			tone == 'ˉ' ? firstTone : tone
+			tone == 'ˉ' ?
+				firstTone :
+				symb == "'" ? noTone : tone
 		]);
 	// [["ㄋㄧ", "ˇ"], ["ㄏㄠ", "ˇ"], ["ㄇㄚ", "˙"], ...]
 }
