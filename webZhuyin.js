@@ -2,21 +2,24 @@ export function sliceText(text) {
 	// use '[' and ']' to combine text, and a '\' to escape
 
 	let parsed = [];
-	let combine = false;
+	let combine = false, tmp = "";
 
 	for(let i = 0; i < text.length; i++){
 		if(!combine){
-			if(text[i] == '[') {
-				combine = true;
-				parsed.push(text[++i] ?? "");
-			}else if(text[i] == '\\') parsed.push(text[++i] ?? "");
+			if(text[i] == '[') combine = true;
+			else if(text[i] == '\\') parsed.push(text[++i] ?? "");
 			else parsed.push(text[i]);
 		} else {
-			if(text[i] == ']') combine = false;
-			else if(text[i] == '\\') parsed.push(parsed.pop() + (text[++i] ?? ""));
-			else parsed.push(parsed.pop() + text[i]);
+			if(text[i] == ']') {
+				combine = false;
+				parsed.push(tmp);
+				tmp = "";
+			} else if(text[i] == '\\') tmp += text[++i] ?? "";
+			else tmp += text[i];
 		}
 	}
+
+	if (tmp != "") parsed.push(tmp);
 	parsed = parsed.map(x => x.replaceAll(/ /g, "&nbsp;")); // Firefox compatibility
 	return parsed;
 	// ["你", "好", "嗎", ...]
