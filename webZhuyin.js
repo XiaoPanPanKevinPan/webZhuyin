@@ -81,7 +81,6 @@ export function rubyHTML(
 	if(["vert", "horiUp", "horiRight"].indexOf(type) == -1)
 		throw `option.type == "${type}" 無效。此函數預期收到 "vert", "horiUp" 或 "horiRight" 作為輸出模式。`;
 
-	console.log(text, zhuyin);
 	text = text.map(x => x.replaceAll(/ /g, "&nbsp;"));
 		// Firefox compatibility: a mere ' ' as the text to be annotated cause the
 		// line extremely high
