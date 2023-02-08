@@ -1,5 +1,5 @@
 export function sliceText(text = "") {
-	// e.g. text == "你好嗎" or "你好[嗎]"
+	// e.g., text == "你好嗎" or "你好[嗎]"
 	// use '[' and ']' to combine text, and a '\' to escape
 
 	let unparsed = [...text], parsed = [];
@@ -69,14 +69,17 @@ export function rubyHTML(
 		withCSS = false,
 		addClass = "",
 		addId = "",
+		addCSS = "",
 		fallbackSymbol: {
 			before: fsBef = "",
 			after: fsAft = ""
 		} = {},
-		userSelectable = false
+		userSelectable = false,
+		fontFor = "all"
 	} = {}
 ){
-	if(["vert", "horiUp", "horiRight"].indexOf(type) == -1) throw `"${type}" 無效。此函數預期收到 "vert", "horiUp" 或 "horiRight" 作為輸出模式。`;
+	if(["vert", "horiUp", "horiRight"].indexOf(type) == -1)
+		throw `option.type == "${type}" 無效。此函數預期收到 "vert", "horiUp" 或 "horiRight" 作為輸出模式。`;
 
 	console.log(text, zhuyin);
 	text = text.map(x => x.replaceAll(/ /g, "&nbsp;"));
@@ -143,7 +146,9 @@ export function rubyHTML(
 
 	let classAttr = `class="${containerClass} ${addClass} ${!userSelectable ? "rtUnselectable" : ""}"`,
 		idAttr = addId ? `id="${addId}" ` : "",
-	    styleElem = !withCSS ? "" : `<style>${rubyCSS(type, {addId, addClass})}</style>`;
+	    styleElem =	!withCSS
+			? ""
+			: `<style>${rubyCSS(type, {addId, addClass, fontFor})}${addCSS}</style>`;
 
 	return `<div ${idAttr}${classAttr}>${styleElem}${mainHTML}</div>`;
 }
@@ -174,10 +179,12 @@ const fontFace = `
 }
 `;
 
-const fontFamily = `"TW-MOE-Std-Kai", "TW-Kai", "DFKai-SB", "BiauKai"`;
+const fontFamily = `font-family: "TW-MOE-Std-Kai", "TW-Kai", "DFKai-SB", "BiauKai";`;
 	/*教育部正楷體、全字庫正楷體、微軟標楷體、蘋果標楷體*/
 
-const vertCSS = ({queryPrefix})=> `${fontFace}
+const vertCSS = ({queryPrefix, addCSS, fontFor})=> `
+${fontFor != "none" ? fontFace : ""}
+
 ${queryPrefix}.zhuyinVert{
 	writing-mode: vertical-rl;
 	overflow: auto;
@@ -188,6 +195,8 @@ ${queryPrefix}.zhuyinVert{
 
 	/* 1 + ((1 - 2/9) * 2 + 1) * 0.3 ~= 1.8 */
 	line-height: 1.8em;
+	${fontFor == "all" ? fontFamily : ""}
+
 	padding-right: 0.25em;
 }
 ${queryPrefix}.zhuyinVert ruby{
@@ -197,7 +206,7 @@ ${queryPrefix}.zhuyinVert rt{
 	writing-mode: vertical-lr;
 	text-orientation: upright;
 
-	font-family: ${fontFamily};
+	${fontFor == "zhuyin" ? fontFamily : ""}
 	font-size: 0.3em;
 
 	translate: calc((-1em + 2em / 9) + (1em / 9));
@@ -221,17 +230,20 @@ ${queryPrefix}.zhuyinVert rt span:last-of-type{
 	text-orientation: upright;
 }`;
 
-const horiUpCSS = ({queryPrefix}) => `${fontFace}
+const horiUpCSS = ({queryPrefix, addCSS, fontFor})=> `
+${fontFor != "none" ? fontFace : ""}
+
 ${queryPrefix}.zhuyinHoriUp {
 	padding-top: 0.5em;
 	box-sizing: border-box;
+	${fontFor == "all" ? fontFamily : ""}
 }
 ${queryPrefix}.zhuyinHoriUp ruby {
 	/* (1 + 5/9) * 0.3 ~= 1.5em, 與 .zhuyinVert 統一 => 1.8em */
 	line-height: 1.8em;
 }
 ${queryPrefix}.zhuyinHoriUp rt {
-	font-family: ${fontFamily};
+	${fontFor == "zhuyin" ? fontFamily : ""};
 	font-size: 0.3em;
 
 	text-align: center;
@@ -251,8 +263,11 @@ ${queryPrefix}.zhuyinHoriUp rt span:last-of-type {
 	translate: calc(-0.3em - 2em / 9) calc(-1em + 2em / 9);
 }`;
 
-const horiRightCSS = ({queryPrefix}) => `${fontFace}
+const horiRightCSS = ({queryPrefix, addCSS, fontFor})=> `
+${fontFor != "none" ? fontFace : ""}
+
 ${queryPrefix}.zhuyinHoriRight {
+	${fontFor == "all" ? fontFamily : ""}
 	box-sizing: border-box;
 }
 ${queryPrefix}.zhuyinHoriRight ruby{
@@ -266,7 +281,7 @@ ${queryPrefix}.zhuyinHoriRight rt{
 	writing-mode: vertical-lr;
 	text-orientation: upright;
 
-	font-family: ${fontFamily};
+	${fontFor == "zhuyin" ? fontFamily : ""};
 	font-size: 0.3em;
 
 	width: calc(1em / 0.3 * 0.5);
@@ -281,7 +296,14 @@ ${queryPrefix}.zhuyinHoriRight rt span:last-of-type {
 	margin-left: calc(-2em / 9);
 }`;
 
-export function rubyCSS(type, {addId = "", addClass = ""} = {}){
+export function rubyCSS(type, {
+	addId = "",
+	addClass = "",
+	fontFor = "all"
+} = {}){
+	if(["all", "zhuyin", "none"].indexOf(fontFor) == -1)
+		throw `option.fontFor == ${fontFor} 無效。此程式預期收到 "all", "zhuyin" 或 "none" 作為其值。`
+
 	let shorten = x => x.replaceAll(/\n|\t/g, " ")
 		.replaceAll(/\/\*.*?\*\//g, "")
 		.replaceAll(/  +/g, " ")
@@ -292,15 +314,26 @@ export function rubyCSS(type, {addId = "", addClass = ""} = {}){
 	let queryPrefix = ""
 		+ (!addId ? "" : `#${addId}`)
 		+ (!addClass ? "" : `.${addClass.trim().replaceAll(/ +/, ".")}`);
+	let	tmp = "",
+		options = {
+			queryPrefix,
+			fontFor
+		};
+
 	switch(type){
 		case "vert":
-			return shorten(vertCSS({queryPrefix}));
+			tmp = vertCSS(options);
+			break;
 
 		case "horiUp":
-			return shorten(horiUpCSS({queryPrefix}));
+			tmp = horiUpCSS(options);
+			break;
 
 		default:
 		case "horiRight":
-			return shorten(horiRightCSS({queryPrefix}));
+			tmp = horiRightCSS(options);
+			break;
 	}
+
+	return shorten(tmp);
 }
