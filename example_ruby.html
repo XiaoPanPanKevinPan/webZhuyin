@@ -21,19 +21,19 @@
 					generate(e){
 						this.horiUpHTML = wz.rubyHTML(
 							wz.sliceText(this.text),
-							wz.parseZhuyin(this.zhuyin),
+							wz.habitualizeZhuyin(wz.parseZhuyin(this.zhuyin)),
 							"horiUp", 
 							{withCSS: true}
 						);
 						this.horiRightHTML = wz.rubyHTML(
 							wz.sliceText(this.text),
-							wz.parseZhuyin(this.zhuyin),
+							wz.habitualizeZhuyin(wz.parseZhuyin(this.zhuyin)),
 							"horiRight", 
 							{withCSS: true}
 						);
 						this.vertHTML = wz.rubyHTML(
 							wz.sliceText(this.text),
-							wz.parseZhuyin(this.zhuyin),
+							wz.habitualizeZhuyin(wz.parseZhuyin(this.zhuyin)),
 							"vert", 
 							{withCSS: true}
 						);
@@ -68,13 +68,13 @@
 			本網頁依據實踐難易度，選擇性地參考了<a href="https://language.moe.gov.tw/001/Upload/files/site_content/M0001/juyin/index.html">《國語符號注音手冊》</a>。<br />
 			<br />
 			為了確保字型合乎標準、美觀、跨裝置兼容，並減少版權糾紛，本網頁以如下順序嘗試字體
-			<li>
-				<ul>裝置上已安裝的、<u>中華民國教育部</u>以「創用CC 姓名標示-禁止改作3.0臺灣版」授權的<a href="https://language.moe.gov.tw/result.aspx?classify_sn=23&subclassify_sn=436&content_sn=10"><u>教育部正楷體</u></a></ul>
-				<ul>網路上動態載入的<u>教育部正楷體</u>，授權同上</ul>
-				<ul>裝置上已安裝的、<u>中華民國數位發展部</u>下轄之<u>全字庫</u>以「開放字型授權條款 OFL-1.1」授權的<a href="https://data.gov.tw/dataset/5961">全字庫正楷體</a></ul>
-				<ul>裝置上已安裝的<u>微軟</u><u>標楷體</u></ul>
-				<ul>裝置上已安裝的<u>蘋果</u><u>標楷體</u></ul>
-			</li>
+			<ul>
+				<li>裝置上已安裝的、<u>中華民國教育部</u>以「創用CC 姓名標示-禁止改作3.0臺灣版」授權的<a href="https://language.moe.gov.tw/result.aspx?classify_sn=23&subclassify_sn=436&content_sn=10"><u>教育部正楷體</u></a></li>
+				<li>網路上動態載入的<u>教育部正楷體</u>，授權同上</li>
+				<li>裝置上已安裝的、<u>中華民國數位發展部</u>下轄之<u>全字庫</u>以「開放字型授權條款 OFL-1.1」授權的<a href="https://data.gov.tw/dataset/5961">全字庫正楷體</a></li>
+				<li>裝置上已安裝的<u>微軟</u><u>標楷體</u></li>
+				<li>裝置上已安裝的<u>蘋果</u><u>標楷體</u></li>
+			</ul>
 			為了減少流量消耗，請儘可能於裝置上安裝<u>教育部正楷體</u>。
 		</footer>
 	</body>
