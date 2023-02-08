@@ -121,11 +121,11 @@ habitualizeZhuyin(zhuyin, options)
 - `options`（可不填）
 	物件，用於設定習慣化的方式。預設值為 `{}`。可能包含下述選項：
 	- `clearFirstTone`（可不填）
-		布林值，預設為 `true`。`true` 則將所有 tone 中的 'ˉ' 替換成 ""。
+		布林，預設為 `true`。`true` 則將所有 tone 中的 'ˉ' 替換成 ""。
 	- `qinShengAsSymbolPrefix`（可不填）
-		布林值，預設為 `true`。`true` 時，若 `tone` 之值為 '˙'，則將 `[symb, tone]` 變換（map，或稱映射）為 `[tone + symb, ""]`。
+		布林，預設為 `true`。`true` 時，若 `tone` 之值為 '˙'，則將 `[symb, tone]` 變換（map，或稱映射）為 `[tone + symb, ""]`。
 	- `symbolYiToHanziYi`（可不填）
-		布林值，預設為 `false`。`true` 則將所有 symb 中的注音 'ㄧ' 替換成漢字 "一"。
+		布林，預設為 `false`。`true` 則將所有 symb 中的注音 'ㄧ' 替換成漢字 "一"。
 
 ### 回傳值
 一個陣列，以多個 [符號－聲調陣列]( #符號－聲調陣列 ) 為元素。譬如 [ [ 'ㄏㄠ', 'ˇ' ], [ 'ㄔ', '' ], [ '˙ㄅㄚ', '' ] ]。
@@ -141,15 +141,55 @@ wz.habitualizeZhuyin([[ 'ㄅㄧㄝ', 'ˊ' ]], {symbolYiToHanziYi: true});
 ```
 
 ## rubyHTML()
-給定文字、注音，設定渲染模式（直書且注音在右、橫書且注音在上、橫書且注音在右），以產生 HTML。
+給定文字、注音，設定渲染模式（直橫書 & 注音位置），以產生 HTML。
 
 ### 語法
 ```js
+rubyHTML(text, zhuyin);
+rubyHTML(text, zhuyin, type);
+rubyHTML(text, zhuyin, type, options);
 ```
 
 #### 參數
-- ``
-	Some description.
+- `text`
+	陣列。由「待注音」的字串組成。如 `["天", "地", "，", "玄", "黃"]`。
+- `zhuyin`
+	陣列。由 [符號－聲調陣列]( #符號－聲調陣列 ) 組成。如 `[[ 'ㄊㄧㄢ', '' ], [ 'ㄉㄧ', 'ˋ' ], [ '', '' ], [ 'ㄒㄩㄢ', 'ˊ' ], [ 'ㄏㄨㄤ', 'ˊ' ]]`
+- `type`（可不填）
+	字串，其值應為 `"vert"`, `"horiUp"` 或 `"horiRight"`。預設值為 `"horiRight"`。
+	- `"vert"`: 直書，注音在右。
+	- `"horiUp"`: 橫書，注音在上。
+	- `"horiRight"`: 橫書，注音在右。
+- `options`（可不填）
+	物件，指定渲染細節，預設值為 {}。可能包含如下選項：
+	- `withCSS`（可不填）
+		布林。指定是否產生帶有 CSS 樣式表 HTML 代碼。預設值為 `false`。若為 `true`，則將樣式打包進一個 `<style>` 標籤之中，並將此標籤作為子元素，以插入所產生的 HTML 元素代碼中。若為 `false`，請稍後使用 [rubyCSS]( #rubyCSS ) 產生樣式表，另行使用。
+	- `addCSS`（可不填）
+		字串。應為合乎規範的 CSS 規則。預設值為 `""`。*此字串僅在 `withCSS` 之值為 `true` 時被插入 `<style>` 標籤的結尾。*
+	- `fontFor`（可不填）
+		字串。控制預設字體的設定範圍。其值應為 `"all"`, `"zhuyin"` 或 `"none"`。預設值為 `"all"`。*此字串僅在 `withCSS` 之值為 `true` 時生效。*
+		- `"all"`: 將預設字體套用在整個產生的 HTML 上。
+		- `"zhuyin"`: 將預設字體套用在產生的注音上。在產生的 HTML 被插入之後，正文字體會與其正文插入位置的前後相同，而注音部分會使用預設字體。如此一來，在保持正文外觀的同時，可留下可預期的注音外觀。
+		- `"none"`: 不套用預設字體。您可以使用 `addCSS` 選項或者其他方式，分別為正文與注音設定外觀。
+	- `addClass`（可不填）
+		字串。預設值為 `""`。設定後會被添加在產生的 HTML 元素代碼中，作為一部份的 class 值。請符合 HTML 對 class 值的規定，例如 "myZhuyin myText"
+	- `addId`（可不填）
+		字串。預設值為 `""`。設定後會被添加在產生的 HTML 元素代碼中，作為 id 值。請符合 HTML 對 id 值的規定。例如 "mainZhuyin"。
+	- `fallbackSymbol`（可不填）
+		物件。設定當瀏覽器不支援 `<ruby>` 標籤時，在注音前後顯示的符號。預設值為 `{}`。
+		- `before`（可不填）
+			字串。被插入在注音前方。
+		- `after`（可不填）
+			字串。被插入在注音後方。
+		譬如，before 設為 `"["`，after 設為 `"]"`，則對於支援的瀏覽器，顯示
+
+		字<ruby><rp>[</rp>注音<rp>]</rp></ruby>
+
+		對於不支援的瀏覽器，顯示
+
+		字[注音]
+		
+	- `userSelectable`（可不填）
 
 #### 回傳值
 Description.
