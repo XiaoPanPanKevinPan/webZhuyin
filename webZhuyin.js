@@ -51,13 +51,15 @@ export function habitualizeZhuyin(
 	} = {}
 ){
 	if(clearFirstTone)
-		zhuyin = zhuyin.map(([symb, tone]) => [symb, tone.replaceAll(/ˉ/g, "")]);
+		zhuyin = zhuyin.map(([symb, tone]) =>
+			[symb, tone.replaceAll(/ˉ/g, "")]);
 	if(qinShengAsSymbolPrefix)
 		zhuyin = zhuyin.map(([symb, tone]) =>
 			tone == "˙" ? ["˙" + symb, ""] : [symb, tone]
 	);
 	if(symbolYiToHanziYi)
-		zhuyin = zhuyin.map(([symb, tone]) => [symb.replaceAll(/ㄧ/g, "一"), tone]);
+		zhuyin = zhuyin.map(([symb, tone]) =>
+			[symb.replaceAll(/ㄧ/g, "一"), tone]);
 	return zhuyin;
 }
 
@@ -158,8 +160,9 @@ const fontFace = `
 	font-family: "TW-MOE-Std-Kai";
 	src:
 		local("TW-MOE-Std-Kai"),
-		url("https://gist.githubusercontent.com/XiaoPanPanKevinPan/e064a6ca6b35a964e0a927bf2f2ecc84/raw/fb85739e5a3906d2b99fa29f29349779e658b690/edukai-4.0.ttf") format("truetype")
-		;
+		url("https://gist.githubusercontent.com/XiaoPanPanKevinPan/e064a6ca6b35a964e0a927bf2f2ecc84/raw/fb85739e5a3906d2b99fa29f29349779e658b690/edukai-4.0.ttf") format("truetype");
+	unicode-range: U+0000-FEFF;
+		/*排除全形標點符號*/
 }
 @font-face {
 	font-family: "TW-Kai";
