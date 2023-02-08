@@ -42,7 +42,17 @@
 			}).mount('#vueApp');
 
 		</script>
-		<style>#vertPrev, #horiUpPrev, #horiRightPrev { font-size: 30px; overflow: auto; border: solid grey 1px; border-radius: 3px;}</style>
+		<style>
+			#vertPrev, #horiUpPrev, #horiRightPrev {
+				font-size: 20px;
+				overflow: auto;
+				border: solid grey 1px;
+				border-radius: 3px;
+			}
+			#vertHTML, #horiUpHTML, #horiRightHTML {
+				line-break: anywhere;
+			}
+		</style>
 	</head>
 	<body>
 		<main id="vueApp" style="
@@ -52,11 +62,12 @@
 		">
 			<textarea id="text" v-model="text" @input="generate" placeholder="這樣子輸入，懂嗎？
 
-這邊直接放上文章"></textarea>
+這邊直接放上文章。文字左右加上方括號（[這樣]）可以讓多個符號被當作一個字。"></textarea>
 			<textarea id="zhuyin" v-model="zhuyin" @input="generate" @keydown="zhuyinTranslator" placeholder="ㄓㄜˋ ㄧㄤˋ ㄗ˙ ㄕㄨˉ ㄖㄨˋ ' ㄉㄨㄥˇ ㄇㄚ˙ ' 
 
-聲調在每個注音結尾，中間插入空格，略過文字以 ' 代替。
-請將鍵盤切換英數模式，直接輸入。空格鍵輸入一聲，'=' 鍵輸入空格。"></textarea>
+請將鍵盤切換至英數模式，直接依照鍵盤上的注音符號輸入。
+應該呈現 {注音}{聲調}{空格}{注音}{聲調}{空格}...的模式。
+['] 用於跳過標點符號，[空格鍵] 用於輸入一聲，[=] 用於補上空格。"></textarea>
 			<div id="vertPrev" v-html="vertHTML ? vertHTML : '垂直文字預覽'"></div>
 			<textarea id="vertHTML" :value="vertHTML" placeholder="垂直文字程式碼" disabled></textarea>
 			<div id="horiUpPrev" v-html="horiUpHTML ? horiUpHTML : '水平、注音在上文字 預覽'"></div>
