@@ -142,10 +142,10 @@ export function rubyHTML(
 	};
 
 	let classAttr = `class="${containerClass} ${addClass} ${!userSelectable ? "rtUnselectable" : ""}"`,
-		idAttr = addId ? `id="${addId}"` : "",
+		idAttr = addId ? `id="${addId}" ` : "",
 	    styleElem = !withCSS ? "" : `<style>${rubyCSS(type, {addId, addClass})}</style>`;
 
-	return `<div ${idAttr} ${classAttr}>${styleElem}${mainHTML}</div>`;
+	return `<div ${idAttr}${classAttr}>${styleElem}${mainHTML}</div>`;
 }
 
 /*--- deal with CSS ---*/
