@@ -183,7 +183,7 @@ rubyHTML(text, zhuyin, type, options);
 			字串。被插入在注音後方。
 		譬如，before 設為 `"["`，after 設為 `"]"`，則對於支援的瀏覽器，顯示
 
-		字<ruby><rp>[</rp>注音<rp>]</rp></ruby>
+		<ruby>字<rp>[</rp><rt>注音</rt><rp>]</rp></ruby>
 
 		對於不支援的瀏覽器，顯示
 
