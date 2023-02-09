@@ -3,9 +3,9 @@
 
 若你在瀏覽器中的 `<script>` 嘗試匯入此函式庫，請加上 `type="module"`，如：
 ```html
-	<script type="module">
-		import ... // 參見下方
-	</script>
+<script type="module">
+	import ... // 參見下方
+</script>
 ```
 。
 
@@ -19,7 +19,7 @@ sliceText("你好"); // ['你', '好']
 // 此時亦可重命名
 import {sliceText as zySliceText, parseZhuyin as zyParse} from "./webZhuyin.js";
 
-	zySliceText("早安"); // ['早', '安']
+zySliceText("早安"); // ['早', '安']
 ```
 
 2. 作為一個物件匯入
@@ -35,7 +35,7 @@ import("./webZhuyin.js").then(webZhuyin=>{
 
 // way 3: 執行環境須支援 ES2022 之 Top-level await
 //        或者此段程式碼位於 async function 之中
-	const webZhuyin = await import("./webZhuyin.js");
+const webZhuyin = await import("./webZhuyin.js");
 ```
 
 # `webZhuyin.js`
@@ -184,14 +184,11 @@ rubyHTML(text, zhuyin, type, options);
 
 		譬如，before 設為 `"["`，after 設為 `"]"`，則對於支援的瀏覽器，顯示
 
-		<div style="display: inline-block; width: 1em; text-align: center">
-			<div style="font-size: 0.3em">注音</div>
-			<div>字</div>
-		</div>
+		<ruby>字<rp>[</rp><rt>注音</rt><rp>]</rp></ruby>
 
 		對於不支援的瀏覽器，顯示
 
-		字\[注音\]
+		字[注音]
 		
 	- `userSelectable`（可不填）
 
