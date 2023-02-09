@@ -221,7 +221,7 @@ ${queryPrefix}.zhuyinVert rt{
 	text-align: center;
 	text-justify: none;
 }
-${queryPrefix}.zhuyinVert.rtUnselectable rt {
+${queryPrefix}.zhuyinVert.rtUnselectable rt, ${queryPrefix}.zhuyinVert.rtUnselectable rp {
 	user-select: none;
 }
 ${queryPrefix}.zhuyinVert rt span:last-of-type{
@@ -256,7 +256,7 @@ ${queryPrefix}.zhuyinHoriUp rt {
 	/* Firefox Only - margin-top and -bottom doesn't work in Chrome */
 	margin-bottom: 0 calc(-1em / 9);
 }
-${queryPrefix}.zhuyinHoriUp.rtUnselectable rt {
+${queryPrefix}.zhuyinHoriUp.rtUnselectable rt, ${queryPrefix}.zhuyinHoriUp.rtUnselectable rp {
 	user-select: none;
 }
 ${queryPrefix}.zhuyinHoriUp rt span:last-of-type {
@@ -289,7 +289,7 @@ ${queryPrefix}.zhuyinHoriRight rt{
 	width: calc(1em / 0.3 * 0.5);
 	padding-left: calc(1em / 9);
 }
-${queryPrefix}.zhuyinHoriRight.rtUnselectable rt {
+${queryPrefix}.zhuyinHoriRight.rtUnselectable rt, ${queryPrefix}.zhuyinHoriRight.rtUnselectable rp {
 	user-select: none;
 }
 ${queryPrefix}.zhuyinHoriRight rt span:last-of-type {
