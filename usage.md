@@ -128,7 +128,7 @@ habitualizeZhuyin(zhuyin, options)
 		布林，預設為 `false`。`true` 則將所有 symb 中的注音 'ㄧ' 替換成漢字 "一"。
 
 ### 回傳值
-一個陣列，以多個 [符號－聲調陣列]( #符號－聲調陣列 ) 為元素。譬如 [ [ 'ㄏㄠ', 'ˇ' ], [ 'ㄔ', '' ], [ '˙ㄅㄚ', '' ] ]。
+一個陣列，以多個 [符號－聲調陣列]( #符號－聲調陣列 ) 為元素。譬如 `[ [ 'ㄏㄠ', 'ˇ' ], [ 'ㄔ', '' ], [ '˙ㄅㄚ', '' ] ]`。
 
 ### 範例
 ```
@@ -176,18 +176,22 @@ rubyHTML(text, zhuyin, type, options);
 	- `addId`（可不填）
 		字串。預設值為 `""`。設定後會被添加在產生的 HTML 元素代碼中，作為 id 值。請符合 HTML 對 id 值的規定。例如 "mainZhuyin"。
 	- `fallbackSymbol`（可不填）
-		物件。設定當瀏覽器不支援 `<ruby>` 標籤時，在注音前後顯示的符號。預設值為 `{}`。
+		物件。設定當瀏覽器不支援 `<ruby>` 標籤時，在注音前後顯示的符號。預設值為 `{}` 可以包含下列選項：
 		- `before`（可不填）
 			字串。被插入在注音前方。
 		- `after`（可不填）
 			字串。被插入在注音後方。
+
 		譬如，before 設為 `"["`，after 設為 `"]"`，則對於支援的瀏覽器，顯示
 
-		<ruby>字<rp>[</rp><rt>注音</rt><rp>]</rp></ruby>
+		<div style="display: inline-block; width: 1em; text-align: center">
+			<div style="font-size: 0.3em">注音</div>
+			<div>字</div>
+		</div>
 
 		對於不支援的瀏覽器，顯示
 
-		字[注音]
+		字\[注音\]
 		
 	- `userSelectable`（可不填）
 
