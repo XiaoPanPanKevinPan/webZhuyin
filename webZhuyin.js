@@ -69,15 +69,17 @@ export function rubyHTML(
 	type = "horiRight",
 	{
 		withCSS = false,
-		addClass = "",
-		addId = "",
+		withFontface = true,
+		fontFor = "all",
 		addCSS = "",
+
+		addId = "",
+		addClass = "",
 		fallbackSymbol: {
 			before: fsBef = "",
 			after: fsAft = ""
 		} = {},
-		userSelectable = false,
-		fontFor = "all"
+		userSelectable = false
 	} = {}
 ){
 	if(["vert", "horiUp", "horiRight"].indexOf(type) == -1)
@@ -149,13 +151,13 @@ export function rubyHTML(
 		idAttr = addId ? `id="${addId}" ` : "",
 	    styleElem =	!withCSS
 			? ""
-			: `<style>${rubyCSS(type, {addId, addClass, fontFor})}${addCSS}</style>`;
+			: `<style>${rubyCSS(type, {addId, addClass, withFontface, fontFor})}${addCSS}</style>`;
 
 	return `<div ${idAttr}${classAttr}>${styleElem}${mainHTML}</div>`;
 }
 
 /*--- deal with CSS ---*/
-const fontFace = `
+export const fontFace = `
 @font-face {
 	font-family: "TW-MOE-Std-Kai";
 	src:
@@ -181,11 +183,13 @@ const fontFace = `
 }
 `;
 
-const fontFamily = `font-family: "TW-MOE-Std-Kai", "TW-Kai", "DFKai-SB", "BiauKai";`;
+export const fontFamily = `"TW-MOE-Std-Kai", "TW-Kai", "DFKai-SB", "BiauKai"`;
 	/*教育部正楷體、全字庫正楷體、微軟標楷體、蘋果標楷體*/
 
-const vertCSS = ({queryPrefix, addCSS, fontFor})=> `
-${fontFor != "none" ? fontFace : ""}
+const fontFamilyRule = `font-family: ${fontFamily};`
+
+const vertCSS = ({queryPrefix, addCSS, fontFor, withFontface})=> `
+${withFontface && fontFor != "none" ? fontFace : ""}
 
 ${queryPrefix}.zhuyinVert{
 	writing-mode: vertical-rl;
@@ -197,7 +201,7 @@ ${queryPrefix}.zhuyinVert{
 
 	/* 1 + ((1 - 2/9) * 2 + 1) * 0.3 ~= 1.8 */
 	line-height: 1.8em;
-	${fontFor == "all" ? fontFamily : ""}
+	${fontFor == "all" ? fontFamilyRule : ""}
 
 	padding-right: 0.25em;
 }
@@ -208,7 +212,7 @@ ${queryPrefix}.zhuyinVert rt{
 	writing-mode: vertical-lr;
 	text-orientation: upright;
 
-	${fontFor == "zhuyin" ? fontFamily : ""}
+	${fontFor == "zhuyin" ? fontFamilyRule : ""}
 	font-size: 0.3em;
 
 	translate: calc((-1em + 2em / 9) + (1em / 9));
@@ -232,20 +236,20 @@ ${queryPrefix}.zhuyinVert rt span:last-of-type{
 	text-orientation: upright;
 }`;
 
-const horiUpCSS = ({queryPrefix, addCSS, fontFor})=> `
-${fontFor != "none" ? fontFace : ""}
+const horiUpCSS = ({queryPrefix, addCSS, fontFor, withFontface})=> `
+${withFontface && fontFor != "none" ? fontFace : ""}
 
 ${queryPrefix}.zhuyinHoriUp {
 	padding-top: 0.5em;
 	box-sizing: border-box;
-	${fontFor == "all" ? fontFamily : ""}
+	${fontFor == "all" ? fontFamilyRule : ""}
 }
 ${queryPrefix}.zhuyinHoriUp ruby {
 	/* (1 + 5/9) * 0.3 ~= 1.5em, 與 .zhuyinVert 統一 => 1.8em */
 	line-height: 1.8em;
 }
 ${queryPrefix}.zhuyinHoriUp rt {
-	${fontFor == "zhuyin" ? fontFamily : ""};
+	${fontFor == "zhuyin" ? fontFamilyRule : ""};
 	font-size: 0.3em;
 
 	text-align: center;
@@ -265,11 +269,11 @@ ${queryPrefix}.zhuyinHoriUp rt span:last-of-type {
 	translate: calc(-0.3em - 2em / 9) calc(-1em + 2em / 9);
 }`;
 
-const horiRightCSS = ({queryPrefix, addCSS, fontFor})=> `
-${fontFor != "none" ? fontFace : ""}
+const horiRightCSS = ({queryPrefix, addCSS, fontFor, withFontface})=> `
+${withFontface && fontFor != "none" ? fontFace : ""}
 
 ${queryPrefix}.zhuyinHoriRight {
-	${fontFor == "all" ? fontFamily : ""}
+	${fontFor == "all" ? fontFamilyRule : ""}
 	box-sizing: border-box;
 }
 ${queryPrefix}.zhuyinHoriRight ruby{
@@ -283,7 +287,7 @@ ${queryPrefix}.zhuyinHoriRight rt{
 	writing-mode: vertical-lr;
 	text-orientation: upright;
 
-	${fontFor == "zhuyin" ? fontFamily : ""};
+	${fontFor == "zhuyin" ? fontFamilyRule : ""};
 	font-size: 0.3em;
 
 	width: calc(1em / 0.3 * 0.5);
@@ -301,7 +305,8 @@ ${queryPrefix}.zhuyinHoriRight rt span:last-of-type {
 export function rubyCSS(type, {
 	addId = "",
 	addClass = "",
-	fontFor = "all"
+	fontFor = "all",
+	withFontface = true
 } = {}){
 	if(["all", "zhuyin", "none"].indexOf(fontFor) == -1)
 		throw `option.fontFor == ${fontFor} 無效。此程式預期收到 "all", "zhuyin" 或 "none" 作為其值。`
@@ -319,7 +324,8 @@ export function rubyCSS(type, {
 	let	tmp = "",
 		options = {
 			queryPrefix,
-			fontFor
+			fontFor,
+			withFontface
 		};
 
 	switch(type){
