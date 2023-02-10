@@ -84,7 +84,7 @@ parseZhuyin(zhuyin, options);
 
 ### 參數
 - `zhuyin`
-	字串。此字串為一串注音，應呈現 `{注音}{空格}{注音}{空格}{注音}{空格}...{注音}` 之模式，``{注音}`處應呈 `{注音符號}{聲調符號}` 之形式，或以 `'` 作為佔位符。例如 `ㄗㄠˇ ㄢˉ ㄚˉ` 為一種。
+	字串。此字串為一串注音，應呈現 `{注音}{空格}{注音}{空格}{注音}{空格}...{注音}` 之模式，`{注音}`處應呈 `{注音符號}{聲調符號}` 之形式，或以 `'` 作為佔位符。例如 `ㄗㄠˇ ㄢˉ ㄚˉ` 為一種。
 - `options`（可不填）
 	物件，用於設定注音的解析方式，預設值為 `{}`。可能包含下述選項：
 	- `defaultTone`（可不填）
@@ -150,7 +150,7 @@ rubyHTML(text, zhuyin, type);
 rubyHTML(text, zhuyin, type, options);
 ```
 
-#### 參數
+### 參數
 - `text`
 	陣列。由「待注音」的字串組成。如 `["天", "地", "，", "玄", "黃"]`。
 - `zhuyin`
@@ -189,10 +189,32 @@ rubyHTML(text, zhuyin, type, options);
 		對於不支援的瀏覽器，顯示
 
 		字[注音]
-		
+
 	- `userSelectable`（可不填）
+		布林，設定檢視者是否可以選取注音。預設為 `false`。為 `true` 時，當檢視者將整段文字選取起來並複製時，會將正文連同注音以及注音前後的 `fallbackSymbol.before`、`fallbackSymbol.after` 選起來。為 `false` 時，只會複製到正文。
 
-#### 回傳值
+### 回傳值
+字串，由 HTML 代碼組成。
+
+### 
+
+### 範例
+```js
+
+```
+
+##
+Description. 
+
+### 語法
+```js
+```
+
+### 參數
+- ``
+	Some description.
+
+### 回傳值
 Description.
 
 ### 範例
@@ -207,30 +229,11 @@ Description.
 ```js
 ```
 
-#### 參數
+### 參數
 - ``
 	Some description.
 
-#### 回傳值
-Description.
-
-### 範例
-```js
-
-```
-
-##
-Description. 
-
-### 語法
-```js
-```
-
-#### 參數
-- ``
-	Some description.
-
-#### 回傳值
+### 回傳值
 Description.
 
 ### 範例
