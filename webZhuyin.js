@@ -277,12 +277,15 @@ ${queryPrefix}.zhuyinHoriRight {
 	box-sizing: border-box;
 }
 ${queryPrefix}.zhuyinHoriRight ruby{
-	display: inline-block;
+	/*display: inline-block;*/
+	align-items: center;
 	line-height: 1.3;
 		/*to create similar spacing as .zhuyinVert & .~HoriUp*/
 }
 ${queryPrefix}.zhuyinHoriRight rt{
-	display: inline-grid;
+	/*display: inline-grid;*/
+	display: inline-block;
+
 	vertical-align: middle;
 	writing-mode: vertical-lr;
 	text-orientation: upright;
@@ -292,14 +295,19 @@ ${queryPrefix}.zhuyinHoriRight rt{
 
 	width: calc(1em / 0.3 * 0.5);
 	padding-left: calc(1em / 9);
+	/*justify-items: end;*/
 }
 ${queryPrefix}.zhuyinHoriRight.rtUnselectable rt, ${queryPrefix}.zhuyinHoriRight.rtUnselectable rp {
 	user-select: none;
 }
 ${queryPrefix}.zhuyinHoriRight rt span:last-of-type {
-	text-align: end;
+	/*text-align: end;
 	margin-bottom: calc(5em / 8 - 2em / 9);
-	margin-left: calc(-2em / 9);
+	margin-left: calc(-2em / 9);*/
+
+	display: inline-block;
+	height: 0;
+	translate: calc(1em - 2em / 9) calc(-5em / 8 + 2em / 9 - 1em);
 }`;
 
 export function rubyCSS(type, {
