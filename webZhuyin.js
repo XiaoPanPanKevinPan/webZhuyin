@@ -69,7 +69,7 @@ export function rubyHTML(
 	type = "horiRight",
 	{
 		withCSS = false,
-		withFontface = true,
+		withFontFace = true,
 		fontFor = "all",
 		addCSS = "",
 
@@ -151,7 +151,7 @@ export function rubyHTML(
 		idAttr = addId ? `id="${addId}" ` : "",
 	    styleElem =	!withCSS
 			? ""
-			: `<style>${rubyCSS(type, {addId, addClass, withFontface, fontFor})}${addCSS}</style>`;
+			: `<style>${rubyCSS(type, {addId, addClass, withFontFace, fontFor})}${addCSS}</style>`;
 
 	return `<div ${idAttr}${classAttr}>${styleElem}${mainHTML}</div>`;
 }
@@ -188,8 +188,8 @@ export const fontFamily = `"TW-MOE-Std-Kai", "TW-Kai", "DFKai-SB", "BiauKai"`;
 
 const fontFamilyRule = `font-family: ${fontFamily};`
 
-const vertCSS = ({queryPrefix, addCSS, fontFor, withFontface})=> `
-${withFontface && fontFor != "none" ? fontFace : ""}
+const vertCSS = ({queryPrefix, addCSS, fontFor, withFontFace})=> `
+${withFontFace && fontFor != "none" ? fontFace : ""}
 
 ${queryPrefix}.zhuyinVert{
 	writing-mode: vertical-rl;
@@ -236,8 +236,8 @@ ${queryPrefix}.zhuyinVert rt span:last-of-type{
 	text-orientation: upright;
 }`;
 
-const horiUpCSS = ({queryPrefix, addCSS, fontFor, withFontface})=> `
-${withFontface && fontFor != "none" ? fontFace : ""}
+const horiUpCSS = ({queryPrefix, addCSS, fontFor, withFontFace})=> `
+${withFontFace && fontFor != "none" ? fontFace : ""}
 
 ${queryPrefix}.zhuyinHoriUp {
 	padding-top: 0.5em;
@@ -269,8 +269,8 @@ ${queryPrefix}.zhuyinHoriUp rt span:last-of-type {
 	translate: calc(-0.3em - 2em / 9) calc(-1em + 2em / 9);
 }`;
 
-const horiRightCSS = ({queryPrefix, addCSS, fontFor, withFontface})=> `
-${withFontface && fontFor != "none" ? fontFace : ""}
+const horiRightCSS = ({queryPrefix, addCSS, fontFor, withFontFace})=> `
+${withFontFace && fontFor != "none" ? fontFace : ""}
 
 ${queryPrefix}.zhuyinHoriRight {
 	${fontFor == "all" ? fontFamilyRule : ""}
@@ -306,7 +306,7 @@ export function rubyCSS(type, {
 	addId = "",
 	addClass = "",
 	fontFor = "all",
-	withFontface = true
+	withFontFace = true
 } = {}){
 	if(["all", "zhuyin", "none"].indexOf(fontFor) == -1)
 		throw `option.fontFor == ${fontFor} 無效。此程式預期收到 "all", "zhuyin" 或 "none" 作為其值。`
@@ -325,7 +325,7 @@ export function rubyCSS(type, {
 		options = {
 			queryPrefix,
 			fontFor,
-			withFontface
+			withFontFace
 		};
 
 	switch(type){
