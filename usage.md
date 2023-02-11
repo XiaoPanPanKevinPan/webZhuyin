@@ -177,10 +177,11 @@ wz.rubyHTML(text, zhuyin, type, options);
 		- `"all"`: 將預設字體套用在整個產生的 HTML 上。
 		- `"zhuyin"`: 將預設字體套用在產生的注音上。在產生的 HTML 被插入之後，正文字體會與其正文插入位置的前後相同，而注音部分會使用預設字體。如此一來，在保持正文外觀的同時，可留下可預期的注音外觀。
 		- `"none"`: 不套用預設字體。您可以使用 `addCSS` 選項或者其他方式，分別為正文與注音設定外觀。
-	- `withFontface`（可不填）
-		布林。預設值為 `true`。`true` 時將預設字體的字體來源插入至 `<style>` 標籤的開頭。若您在使用預設字體時，不想將此選項設為 true，則請使用。*此選項僅在 `withCSS` 值為 `true` 且 `fontFor` 值不為 `"none"` 時生效。*
+	- `withFontFace`（可不填）
+		布林。預設值為 `true`。`true` 時將預設字體的字體來源插入至 `<style>` 標籤的開頭。若您在使用預設字體時，不想將此選項設為 `true`，則請使用 [wz.fontFace]( #wz.fontFace )。
+。*此選項僅在 `withCSS` 值為 `true` 且 `fontFor` 值不為 `"none"` 時生效。*
 	- `addClass`（可不填）
-		字串。預設值為 `""`。設定後會被添加在產生的 HTML 元素代碼中，作為一部份的 class 值。請符合 HTML 對 class 值的規定，例如 "myZhuyin myText"
+		字串。預設值為 `""`。設定後會被添加在產生的 HTML 元素代碼中，作為一部份的 class 值。請符合 HTML 對 class 值的規定，例如 "myZhuyin myText"。
 	- `addId`（可不填）
 		字串。預設值為 `""`。設定後會被添加在產生的 HTML 元素代碼中，作為 id 值。請符合 HTML 對 id 值的規定。例如 "mainZhuyin"。
 	- `fallbackSymbol`（可不填）
@@ -219,7 +220,7 @@ wz.rubyHTML(text, zhuyin, type, options);
 ```
 其中，
 - 如果有設定 addID 或 addClass，則會自動將 `<style>` 中的每條 CSS Rules 前方加上 ID 與 Class selector，以限縮 CSS 應用的範圍。
-- 程式生成的 CSS Rules，是使用 `wz.rubyCSS(type, {addId: addId, addClass: addClass, fontFor: fontFor})` 的回傳值，詳見 [rubyCSS()]( #rubyCSS() )。若 `withCSS` 值為 `false`，則可以稍後以該函數生成，從而
+- 程式生成的 CSS Rules，是使用 `wz.rubyCSS(type, {addId: addId, addClass: addClass, fontFor: fontFor, withFontFace: withFontFace})` 的回傳值，詳見 [rubyCSS()]( #rubyCSS() )。若 `withCSS` 值為 `false`，則可以稍後以該函數生成，從而
 - 最外層母元素的 class 值，會依據 `type` 而有差異。
 	|     `type`    | class 包含      |
 	|:-------------:|-----------------|
@@ -259,11 +260,14 @@ zhuyin2 = wz.habitualize(zhuyin2);
 	// zhuyin1 == [ [ 'ㄌㄧㄠ', 'ˋ' ], [ 'ㄑㄧㄠ', 'ˋ' ], [ 'ㄔㄨㄣ', '' ], [ 'ㄈㄥ', '' ] ]
 	// zhuyin2 == [ [ 'ㄌㄧㄠ', 'ˋ' ], [ 'ㄑㄧㄠ', 'ˋ' ], [ 'ㄔㄨㄣ', '' ], [ 'ㄈㄥ', '' ], [ 'ㄔㄨㄟ', '' ], [ '', '' ] ]
 
-wz.rubyHTML(sliceText("料峭春風"));
-wz.rubyHTML(sliceText("料峭春風"));
+let res1 = wz.rubyHTML(sliceText("料峭春風"), zhuyin1);
+let res2 = wz.rubyHTML(sliceText("料峭春風"), zhuyin2);
 	// 上述二者效果皆同，因為此程式會依照正文字數上注音，
 	// 所以如果注音比正文多，便無法顯示。反之，
 	// 會出現缺少注音的正文文字
+
+document.body.insertAdjacentHTML("beforeend", res1);
+	// 這會在 <body> 內的底部插入這段注音文字
 ```
 
 ## wz.rubyCSS()
@@ -271,8 +275,9 @@ wz.rubyHTML(sliceText("料峭春風"));
 
 ### 語法
 ```js
-	rubyCSS(type);
-	rubyCSS(type, options);
+rubyCSS();
+rubyCSS(type);
+rubyCSS(type, options);
 ```
 
 ### 參數
@@ -283,35 +288,88 @@ wz.rubyHTML(sliceText("料峭春風"));
 	- `"horiUp"`: 橫書，注音在上。
 	- `"horiRight"`: 橫書，注音在右。
 - `options`（可不填）
-	物件。下方各選項之值應與呼叫 `rubyHTML()` 時使用的相應值相同。預設值為 `{}`。
-	- `addId`
-	- `addClass`
-	- `fontFor`
-	- `withFontface`
+	物件。下方各選項之值建議與呼叫 `rubyHTML()` 時使用的值相應。預設值為 `{}`。
+	- `addId`（可不填）
+		字串。預設值為 `""`。設定後，產生的 CSS Rules 的作用範圍會被侷限於有該 id 的元素。前面請勿帶 `#` 號。
+	- `addClass`（可不填）
+		字串。預設值為 `""`。設定後，產生的 CSS Rules 的作用範圍會被侷限於有相應 class 的元素。若有多個 class 值，請以空格 ` ` 分開，且前方請勿綴以 `.`。也就是說，請符合 HTML 對 class 屬性的規定。
+	- `fontFor`（可不填）
+		字串。預設值為 `"all"`。
+		- `"all"`: 將預設字體套用在整個產生的 HTML 上。
+		- `"zhuyin"`: 將預設字體套用在產生的注音上。在產生的 HTML 被插入之後，正文字體會與其正文插入位置的前後相同，而注音部分會使用預設字體。如此一來，在保持正文外觀的同時，可留下可預期的注音外觀。
+		- `"none"`: 不套用預設字體。您可以使用 `addCSS` 選項或者其他方式，分別為正文與注音設定外觀。
+	- `withFontFace`（可不填）
+		布林。預設值為 `true`。`true` 時將預設字體的字體來源插入至回傳值的開頭。若您在使用預設字體時，不想將此選項設為 `true`，則請讀取 [wz.fontFace]( #wz.fontFace ) 並另外操作。請注意，@font-face 的作用範圍由於 CSS 本身特性，無法被限制住。
 
 ### 回傳值
-Description.
+一串 CSS 代碼。並不包含 `<style>` 標籤。
 
 ### 範例
 ```js
-
+let res = rubyCSS("vert", { withFontFace: false });
+document.head.insertAdjacentHTML("beforeend", "<style>" + res + "</style>");
 ```
 
-##
-Description. 
+## wz.fontFace
+字串。記載了預設字體的來源。多條 CSS `@font-face` Rules。
 
 ### 語法
 ```js
+wz.fontFace;
 ```
-
-### 參數
-- ``
-	Some description.
-
-### 回傳值
-Description.
 
 ### 範例
 ```js
+document.head.insertAdjacentHTML("beforeend", "<style>" + wz.fontFace + </style>);
+```
+## wz.fontFamily
+字串。記載了預設字體的應用順序。合乎 CSS 對於 font-family 的值的規範。
+
+### 語法
+```js
+wz.fontFamily;
+```
+
+### 範例
+```js
+// 對於一個沒有字體設定、加上了自定義 class 的注音區塊
+let zhuyin = wz.parseZhuyin("ㄌㄧㄠˋ ㄑㄧㄠˋ ㄔㄨㄣˉ ㄈㄥˉ"),
+zhuyin = wz.habitualize(zhuyin1);
+let res = wz.rubyHTML(
+	sliceText("料峭春風"),
+	zhuyin1,
+	"vert",
+	{ withCSS: true, fontFor: "none", addClass: "cuteText" }
+);
+
+let newStyle = `
+<style>
+	/* 補指定預設字體的來源 */
+	${wz.fontFace}
+
+	.cuteText {
+		font-family: "jf-openhuninn-1.1", ${wz.fontFamily}, sans-serif;
+	}
+</style>
+`
 
 ```
+
+[//]: # ##
+[//]: # Description. 
+[//]: # 
+[//]: # ### 語法
+[//]: # ```js
+[//]: # ```
+[//]: # 
+[//]: # ### 參數
+[//]: # - `x`
+[//]: # 	Some description.
+[//]: # 
+[//]: # ### 回傳值
+[//]: # Description.
+[//]: # 
+[//]: # ### 範例
+[//]: # ```js
+[//]: # 
+[//]: # ```
