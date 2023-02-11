@@ -342,17 +342,16 @@ let res = wz.rubyHTML(
 	{ withCSS: true, fontFor: "none", addClass: "cuteText" }
 );
 
-let newStyle = `
-<style>
+let newStyle = `<style>
 	/* 補指定預設字體的來源 */
 	${wz.fontFace}
 
 	.cuteText {
 		font-family: "jf-openhuninn-1.1", ${wz.fontFamily}, sans-serif;
 	}
-</style>
-`
+</style>`;
 
+document.head.insertAdjacentHTML("beforeend", newStyle);
 ```
 
 <!--
