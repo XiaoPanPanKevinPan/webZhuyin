@@ -44,7 +44,7 @@ const webZhuyin = await import("./webZhuyin.js");
 ```
 
 # `webZhuyin.js`
-請注意，本文件假設使用者使用 `import * as wz from ...` 匯入此模組。所以請視情況調整呼叫函數的方式。
+請注意，本文件假設使用者使用 `import * as wz from ...` 匯入此模組。所以請視情況調整呼叫函數的方式。此模組支援 NodeJS。
 
 ## 符號－聲調陣列
 **專有名詞** 陣列，長度為 2，形如 `[symbol, tone]`。
@@ -352,6 +352,70 @@ let newStyle = `<style>
 </style>`;
 
 document.head.insertAdjacentHTML("beforeend", newStyle);
+```
+
+# `1qazToBopomofo.js`
+請注意，本文件假設使用者使用 `import * as kb from ...` 匯入此模組。所以請視情況調整呼叫函數的方式。此模組不支援 NodeJS。
+
+## kb.translator()
+一個事件處理器（event handler）。攔截 [keydown 事件]( https://developer.mozilla.org/en-US/docs/Web/API/Element/keydown_event )，並發出自定義的 [input 事件]( https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/input_event )。
+
+### 語法
+```js
+kb.translator(event);
+	// 詳見範例
+```
+
+### 參數
+- `event`
+	基於 [Event]( https://developer.mozilla.org/en-US/docs/Web/API/Event ) 界面的物件。
+
+### 回傳值
+無。
+
+### 詳細說明
+將此函數使用 [`.addEventListener()`]( https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener ) 附加在任意 `<textarea>` 上的 keydown 事件，可以將使用者輸入的英數符號轉換為注音與聲調符號。為了減少後續問題，此函數會發出自訂的 beforeinput 及 input 事件，所以若要對該二事件進行處理，請忽略 isTrusted 值為 `false` 的問題。
+
+請提醒使用者在該 `<textarea>` 中輸入時，先「切換到英數模式」。當使用者按下注音鍵盤上的按鍵後，會將相應的注音或聲調符號輸入到該 `<textarea>` 中。若輸入的是聲調符號或者 `'` 符號，後方會自動加上空格。使用者若需補上空格，則應該按 `=` 鍵。
+
+該 `<textarea>` 中的內容，多數情況下，可以直接餵給 `webZhuyin.js` 中的 parseZhuyin() 使用。
+
+### 範例
+```js
+// 選擇一個 HTML 元素
+let textarea = document.querySelector("textarea#zhuyinInput");
+
+// 在該元素上新增 keydown 事件偵聽器，將此事件處理器附在其上
+textarea.addEventListener("keydown", kb.translator);
+```
+
+## kb.createZhuyinTextarea()
+創造一個 `<textarea>` 元素，並自動將輸入的英數符號轉為注音符號。
+
+### 語法
+```js
+kb.createZhuyinTextarea();
+```
+
+### 參數
+無。
+
+### 回傳值
+一個新的 [Element]( https://developer.mozilla.org/en-US/docs/Web/API/Element )，如同 [Document.createElement()]( https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement ) 所產生。此 Element 已經以 addEventListener() 對 keydown 事件附加了 [kb.translator()]( #kb.translator() )。
+
+### 範例
+```js
+let zhuyinTextarea = kb.createZhuyinTextarea();
+
+// 記得提示輸入方式
+zhuyinTextarea.placeholder = "請將輸入法切換至英數模式，並照鍵盤上的注音符號輸入。['] 用於跳過標點符號，[=] 用於補上空格。";
+
+// 偵測使用者輸入
+zhuyinTextarea.addEventListener("input", (e)=>{
+	// 然後處理輸入後的內容
+	let input = e.target.value;
+	doSomething(input);
+});
 ```
 
 <!--
