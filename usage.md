@@ -1,7 +1,7 @@
-# How to import 如何匯入函式庫
-此函式庫適用於有 ES6 支援之 JavaScript 執行環境。
+# How to import 如何匯入模組
+此模組（module）適用於有 ES6 支援之 JavaScript 執行環境。
 
-若你在瀏覽器中的 `<script>` 嘗試匯入此函式庫，請加上 `type="module"`，如：
+若你在瀏覽器中的 `<script>` 嘗試匯入此模組，請加上 `type="module"`，如：
 ```html
 <script type="module">
 	import ... // 參見下方
@@ -44,7 +44,7 @@ const webZhuyin = await import("./webZhuyin.js");
 ```
 
 # `webZhuyin.js`
-請注意，本文件假設使用者使用 2. 所提及 `import * as wz from ...`，所以請視情況調整呼叫函數的方式。
+請注意，本文件假設使用者使用 `import * as wz from ...` 匯入此模組。所以請視情況調整呼叫函數的方式。
 
 ## 符號－聲調陣列
 **專有名詞** 陣列，長度為 2，形如 `[symbol, tone]`。
