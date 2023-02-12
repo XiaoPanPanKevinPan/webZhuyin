@@ -3,7 +3,7 @@ const createInputEvents = (options) => ({
 	input: new InputEvent("input", options)
 });
 
-export async function translator(e){
+export function translator(e){
 	// `e` should be an keydown event
 
 	const orig = "1qaz2wsxedcrfv5tgbyhnujm8ik,9ol.0p;/-= 6347'",
@@ -21,7 +21,7 @@ export async function translator(e){
 
 	// create input events
 	const {beforeInput: eBeforeInput, input: eInput} =
-		await createInputEvents({
+		createInputEvents({
 			inputType: "insertText",
 			data: newstr,
 			isComposing: false
