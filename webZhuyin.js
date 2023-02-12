@@ -160,25 +160,27 @@ export function rubyHTML(
 export const fontFace = `
 @font-face {
 	font-family: "TW-MOE-Std-Kai";
-	src:
-		local("TW-MOE-Std-Kai"),
-		url("https://gist.githubusercontent.com/XiaoPanPanKevinPan/e064a6ca6b35a964e0a927bf2f2ecc84/raw/fb85739e5a3906d2b99fa29f29349779e658b690/edukai-4.0.ttf") format("truetype");
-	unicode-range: U+0000-FEFF;
+	src: local("TW-MOE-Std-Kai"),
+	     url("https://raw.githubusercontent.com/XiaoPanPanKevinPan/fontCollection/main/edukai-4.0_regen.woff2") format("woff2");
+	unicode-range: U+0000-2FFF, U+3040-FEFF;
 		/*排除全形標點符號*/
 }
 @font-face {
 	font-family: "TW-Kai";
-	src: local("TW-Kai"), url("https://raw.githubusercontent.com/XiaoPanPanKevinPan/fontCollection/main/TW-Kai-98_1.ttf") format("truetype");
+	src: local("TW-Kai"),
+	     url("https://raw.githubusercontent.com/XiaoPanPanKevinPan/fontCollection/main/TW-Kai-98_1_regen.woff2") format("woff2");
 	unicode-range: U+0000-FFFF;
 }
 @font-face {
 	font-family: "TW-Kai";
-	src: local("TW-Kai-Ext-B"), url("https://raw.githubusercontent.com/XiaoPanPanKevinPan/fontCollection/main/TW-Kai-Ext-B-98_1.ttf") format("truetype");
+	src: local("TW-Kai-Ext-B"),
+	     url("https://raw.githubusercontent.com/XiaoPanPanKevinPan/fontCollection/main/TW-Kai-Ext-B-98_1_regen.woff2") format("woff2");
 	unicode-range: U+20000-2FFFF;
 }
 @font-face {
 	font-family: "TW-Kai";
-	src: local("TW-Kai-Plus"), url("https://github.com/XiaoPanPanKevinPan/fontCollection/blob/main/TW-Kai-Plus-98_1.ttf") format("truetype");
+	src: local("TW-Kai-Plus"),
+	     url("https://raw.githubusercontent.com/XiaoPanPanKevinPan/fontCollection/main/TW-Kai-Plus-98_1_regen.woff2") format("woff2");
 	unicode-range: U+F0000-FFFFF;
 }
 `;
