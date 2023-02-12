@@ -158,13 +158,13 @@ export function rubyHTML(
 
 /*--- deal with CSS ---*/
 export const fontFace = `
-@font-face {
+/*@font-face {
 	font-family: "TW-MOE-Std-Kai";
 	src: local("TW-MOE-Std-Kai"),
 	     url("https://raw.githubusercontent.com/XiaoPanPanKevinPan/fontCollection/main/edukai-4.0_regen.woff2") format("woff2");
 	unicode-range: U+0000-2FFF, U+3040-FEFF;
-		/*排除全形標點符號*/
-}
+		/*排除全形標點符號* /
+}*/
 @font-face {
 	font-family: "TW-Kai";
 	src: local("TW-Kai"),
@@ -185,8 +185,8 @@ export const fontFace = `
 }
 `;
 
-export const fontFamily = `"TW-MOE-Std-Kai", "TW-Kai", "DFKai-SB", "BiauKai"`;
-	/*教育部正楷體、全字庫正楷體、微軟標楷體、蘋果標楷體*/
+export const fontFamily = /*`"TW-MOE-Std-Kai",` */`"TW-Kai", "DFKai-SB", "BiauKai"`;
+	/* ~~教育部正楷體、~~ 全字庫正楷體、微軟標楷體、蘋果標楷體*/
 
 const fontFamilyRule = `font-family: ${fontFamily};`
 
@@ -204,6 +204,8 @@ ${queryPrefix}.zhuyinVert{
 	/* 1 + ((1 - 2/9) * 2 + 1) * 0.3 ~= 1.8 */
 	line-height: 1.8em;
 	${fontFor == "all" ? fontFamilyRule : ""}
+
+	line-break: anywhere;
 
 	padding-right: 0.25em;
 }
@@ -245,6 +247,8 @@ ${queryPrefix}.zhuyinHoriUp {
 	padding-top: 0.5em;
 	box-sizing: border-box;
 	${fontFor == "all" ? fontFamilyRule : ""}
+
+	line-break: anywhere;
 }
 ${queryPrefix}.zhuyinHoriUp ruby {
 	/* (1 + 5/9) * 0.3 ~= 1.5em, 與 .zhuyinVert 統一 => 1.8em */
@@ -277,6 +281,7 @@ ${withFontFace && fontFor != "none" ? fontFace : ""}
 ${queryPrefix}.zhuyinHoriRight {
 	${fontFor == "all" ? fontFamilyRule : ""}
 	box-sizing: border-box;
+	line-break: anywhere;
 }
 ${queryPrefix}.zhuyinHoriRight ruby{
 	/*display: inline-block;*/
