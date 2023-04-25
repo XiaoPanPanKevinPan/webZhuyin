@@ -3,8 +3,8 @@ const createInputEvents = (options) => ({
 	input: new InputEvent("input", options)
 });
 
-export function translator(e){
-	// `e` should be an keydown event
+export function translator(e){	
+	// `e` should be a keydown event
 
 	const orig = "1qaz2wsxedcrfv5tgbyhnujm8ik,9ol.0p;/-= 6347'",
 	      symb = "ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ ˉˊˇˋ˙'";
