@@ -3,6 +3,8 @@ const createInputEvents = (options) => ({
 	input: new InputEvent("input", options)
 });
 
+// this won't work while IMEs are enabled
+// consider create virtual keyboard
 export function translator(e){	
 	// `e` should be a keydown event
 

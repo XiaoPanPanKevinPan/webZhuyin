@@ -355,7 +355,7 @@ document.head.insertAdjacentHTML("beforeend", newStyle);
 ```
 
 # `1qazToBopomofo.js`
-請注意，本文件假設使用者使用 `import * as kb from ...` 匯入此模組。所以請視情況調整呼叫函數的方式。此模組不支援 NodeJS。
+請注意，本文件假設使用者使用 `import * as kb from ...` 匯入此模組。所以請視情況調整呼叫函數的方式。此模組不支援 NodeJS。另外，**由於無法關閉使用者輸入法，所以在手機上此模組難以運作！**
 
 ## kb.translator()
 一個事件處理器（event handler）。攔截 [keydown 事件]( https://developer.mozilla.org/en-US/docs/Web/API/Element/keydown_event )，並發出自定義的 [input 事件]( https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/input_event )。
