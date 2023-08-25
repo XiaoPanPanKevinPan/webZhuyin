@@ -1,7 +1,7 @@
 # webZhuyin: 以 HTML 幫文字加上注音
 
 [程式連結]( https://xiaopanpankevinpan.github.io/webZhuyin/example_ruby.html )
-[模組說明]( ./usage.md )
+[模組說明]( https://xiaopanpankevinpan.github.io/webZhuyin/usage ) <!-- i.e., "./usage.md" -->
 
 ## 為什麼需要 webZhuyin
 近來，數位混成教育風行一時。然而作者發現，目前並未有使用簡便的文字加注音方案，能兼顧「跨瀏覽器相容性」與「檔案大小」。此程式／模組便是為了此目標設計。
@@ -20,7 +20,7 @@
 - 帶注音之點陣圖片（.png, .jpg, .gif）的劣勢 <--> webZhuyin 的優勢
 	- 圖片檔案大，傳輸用時久且耗流量
 		<--> webZhuyin 只會產生 HTML 代碼，是純文字，故傳輸方便。且瀏覽器會自動快取字型檔，一勞永逸。
-  - 許多網站內建之編輯器不支援圖片上傳
+	- 許多網站內建之編輯器不支援圖片上傳
 		<--> webZhuyin 只要編輯器支援 HTML 輸入，即可顯示帶注音之文字
 	- 圖片放大就模糊／圖片上傳之後畫質變低了，結果注音不清楚
 		<--> webZhuyin 所產生為 HTML 代碼，由瀏覽器依據放大倍率渲染，故文字清晰。

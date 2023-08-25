@@ -7,41 +7,40 @@
 	import ... // 參見下方
 </script>
 ```
-。
 
 常見的匯入方法：
 1. 分項目匯入（須放在程式開始處）
-```js
-import {sliceText, parseZhuyin, rubyHTML, rubyCSS} from "./webZhuyin.js";
+	```js
+	import {sliceText, parseZhuyin, rubyHTML, rubyCSS} from "./webZhuyin.js";
 
-sliceText("你好"); // ['你', '好']
+	sliceText("你好"); // ['你', '好']
 
-// 此時亦可重命名
-import {sliceText as zySliceText, parseZhuyin as zyParse} from "./webZhuyin.js";
+	// 此時亦可重命名
+	import {sliceText as zySliceText, parseZhuyin as zyParse} from "./webZhuyin.js";
 
-zySliceText("早安"); // ['早', '安']
+	zySliceText("早安"); // ['早', '安']
 
-// 懶惰一點，全部匯入
-import * from "./webZhuyin.js"
+	// 懶惰一點，全部匯入
+	import * from "./webZhuyin.js"
 
-sliceText("你好");
-```
+	sliceText("你好");
+	```
 
 2. 作為一個物件匯入
-```js
-// way 1: 須在程式之始
-import * as wz from "./webZhuyin.js";
-wz.sliceText("你好"); // 回傳：['你', '好']
+	```js
+	// way 1: 須在程式之始
+	import * as wz from "./webZhuyin.js";
+	wz.sliceText("你好"); // 回傳：['你', '好']
 
-// way 2: 
-import("./webZhuyin.js").then(webZhuyin=>{
-	webZhuyin.sliceText("你好"); // 回傳：['你', '好']
-});
+	// way 2: 
+	import("./webZhuyin.js").then(webZhuyin=>{
+		webZhuyin.sliceText("你好"); // 回傳：['你', '好']
+	});
 
-// way 3: 執行環境須支援 ES2022 之 Top-level await
-//        或者此段程式碼位於 async function 之中
-const webZhuyin = await import("./webZhuyin.js");
-```
+	// way 3: 執行環境須支援 ES2022 之 Top-level await
+	//        或者此段程式碼位於 async function 之中
+	const webZhuyin = await import("./webZhuyin.js");
+	```
 
 # `webZhuyin.js`
 請注意，本文件假設使用者使用 `import * as wz from ...` 匯入此模組。所以請視情況調整呼叫函數的方式。此模組支援 NodeJS。
@@ -220,16 +219,19 @@ wz.rubyHTML(text, zhuyin, type, options);
 ```
 其中，
 - 如果有設定 addID 或 addClass，則會自動將 `<style>` 中的每條 CSS Rules 前方加上 ID 與 Class selector，以限縮 CSS 應用的範圍。
-- 程式生成的 CSS Rules，是使用 `wz.rubyCSS(type, {addId: addId, addClass: addClass, fontFor: fontFor, withFontFace: withFontFace})` 的回傳值，詳見 [rubyCSS()]( #rubyCSS() )。若 `withCSS` 值為 `false`，則可以稍後以該函數生成，從而
+- 程式生成的 CSS Rules，是使用 `wz.rubyCSS(type, {addId: addId, addClass: addClass, fontFor: fontFor, withFontFace: withFontFace})` 的回傳值，詳見 [rubyCSS()]( #rubyCSS )。若 `withCSS` 值為 `false`，則可以稍後以該函數生成，從而
 - 最外層母元素的 class 值，會依據 `type` 而有差異。
+
 	|     `type`    | class 包含      |
 	|:-------------:|-----------------|
 	|    `"vert"`   | zhuyinVert      |
 	|   `"horiUp"`  | zhuyinHoriUp    |
 	| `"horiRight`  | zhuyinHoriRight |
+
   亦會依據 `userSelectable` 有所差異。若 `userSelectable` 值為 `false`，則將包含 rtUnselectable。
 		
 - 主要的 HTML，以及最外層母元素的 class 值，會依據 `type` 而有差異。
+
 	|     `type`    | 主要的 HTML                                                                       |
 	|:-------------:|-----------------------------------------------------------------------------------|
 	|    `"vert"`   | 一個 `<ruby>` 元素，內含多個 {{ 字與注音 }}                                       |
@@ -270,7 +272,7 @@ document.body.insertAdjacentHTML("beforeend", res1);
 	// 這會在 <body> 內的底部插入這段注音文字
 ```
 
-## wz.rubyCSS()
+## wz.rubyCSS() <a id="rubyCSS"></a>
 生成 CSS 代碼。配合 `withCSS` 值為 `false` 透過`wz.rubyHTML()` 產生的 HTML，可以用來減少網頁中的代碼重複。
 
 ### 語法
